@@ -1,4 +1,4 @@
-(function() {
+(function electronWindowSetup() {
 	var fs = require('fs');
 	var shell = require('shell');
 	var ipc = require('electron').ipcRenderer;

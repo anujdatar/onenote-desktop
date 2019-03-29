@@ -27,7 +27,8 @@ function createWindow () {
     preload: path.join(__dirname, '/src/js/preloadInit.js'),
     title: 'OneNote',
     webPreferences: {
-      nodeIntegration: false
+			nodeIntegration: false,
+			webviewTag: true
     }
   })
 
@@ -36,7 +37,7 @@ function createWindow () {
   mainWindow.loadFile('./src/index.html')
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+  mainWindow.webContents.openDevTools()
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
