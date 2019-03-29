@@ -1,5 +1,5 @@
 // Modules to control application life and create native browser window
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, BrowserView } = require('electron')
 const path = require('path')
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -19,8 +19,13 @@ function createWindow () {
     }
   })
 
+  let mainView = new BrowserView()
+  mainWindow.setBrowserView(mainView)
+  mainView.webContents.loadURL('https:/onenote.com/hrd')
+  viewResizeFit(mainWindow, mainView)
+
   // and load the index.html of the app.
-  mainWindow.loadFile(path.join(__dirname, './src/index.html'))
+  // mainWindow.loadFile(path.join(__dirname, './src/index.html'))
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
@@ -32,6 +37,13 @@ function createWindow () {
     // when you should delete the corresponding element.
     mainWindow = null
   })
+}
+
+function viewResizeFit(window, view) {
+  let windowBounds = window.getBounds()
+  windowBounds.x = 0
+  windowBounds.y = 0
+  view.setBounds(windowBounds)
 }
 
 // This method will be called when Electron has finished
