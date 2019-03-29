@@ -5,6 +5,7 @@ const path = require('path')
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
+let mainView
 
 function createWindow () {
   // Create the browser window.
@@ -19,7 +20,7 @@ function createWindow () {
     }
   })
 
-  let mainView = new BrowserView()
+  mainView = new BrowserView()
   mainWindow.setBrowserView(mainView)
   mainView.webContents.loadURL('https:/onenote.com/hrd')
   viewResizeFit(mainWindow, mainView)
@@ -36,6 +37,9 @@ function createWindow () {
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
     mainWindow = null
+  })
+  mainWindow.on('resize', function () {
+    viewResizeFit(mainWindow, mainView)
   })
 }
 
