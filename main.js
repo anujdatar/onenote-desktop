@@ -1,17 +1,19 @@
 // Modules to control application life and create native browser window
 const { app, BrowserWindow, BrowserView } = require('electron')
 const path = require('path')
+const eStore = require('electron-store')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
 let mainView
+// new electron-store obj to store window config
+const conf = new eStore()
+
 
 function createWindow () {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
     icon: path.join(__dirname, './src/images/logo.png'),
     title: "One Note",
     webPreferences: {
@@ -20,16 +22,30 @@ function createWindow () {
     }
   })
 
+  // set window bounds based on stored config
+  if (typeof conf.get('windowBounds') !== 'undefined') {
+    mainWindow.setBounds(conf.get('windowBounds'))
+  }
+
+  // open website/webapp in an Electron WebView
   mainView = new BrowserView()
   mainWindow.setBrowserView(mainView)
   mainView.webContents.loadURL('https:/onenote.com/hrd')
+  // resize browserView to fill browserWindow
   viewResizeFit(mainWindow, mainView)
 
   // and load the index.html of the app.
   // mainWindow.loadFile(path.join(__dirname, './src/index.html'))
+  // conventional way of opning a link in a browserWindow
+  // mainWindow.loadURL('https:/onenote.com/hrd')
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
+
+  // Emitted when the window is going to be closed
+  mainWindow.on('close', function() {
+    conf.set("windowBounds", mainWindow.getBounds())
+  })
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
@@ -38,14 +54,17 @@ function createWindow () {
     // when you should delete the corresponding element.
     mainWindow = null
   })
+
   mainWindow.on('resize', function () {
     viewResizeFit(mainWindow, mainView)
+    conf.set("windowBounds", mainWindow.getBounds())
   })
 }
 
+// resize browserview based on current window size
 function viewResizeFit(window, view) {
   let windowBounds = window.getBounds()
-  windowBounds.x = 0
+  windowBounds.x = 0  // (0,0) w.r.t. window's internals, not screen coordinates
   windowBounds.y = 0
   view.setBounds(windowBounds)
 }
@@ -67,6 +86,3 @@ app.on('activate', function () {
   // dock icon is clicked and there are no other windows open.
   if (mainWindow === null) createWindow()
 })
-
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
