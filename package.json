@@ -1,5 +1,6 @@
 {
   "name": "onenote-desktop",
+  "productName": "OneNote",
   "version": "1.0.0",
   "description": "OneNote desktop app for Linux",
   "productDescription": "OneNote.com wrapped in electron packaged for Linux (debian)",

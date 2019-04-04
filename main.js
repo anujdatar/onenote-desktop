@@ -1,5 +1,5 @@
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, BrowserView, session } = require('electron')
+const { app, BrowserWindow } = require('electron')
 const path = require('path')
 const eStore = require('electron-store')
 
@@ -14,11 +14,10 @@ function createWindow () {
   // Create the browser window.
   mainWindow = new BrowserWindow({
     icon: path.join(__dirname, './src/images/logo.png'),
-    title: "One Note",
+    title: "OneNote",
     webPreferences: {
       nodeIntegration: false,
-      contextIsolation: true,
-      webviewTag: true
+      contextIsolation: true
     }
   })
 
@@ -28,7 +27,7 @@ function createWindow () {
   }
 
    // conventional way of opning a link in a browserWindow
-  mainWindow.loadURL('https://onenote.com/hrd')
+  mainWindow.loadURL('https://onenote.com/')
 
    // Emitted when the window is going to be closed
   mainWindow.on('close', function() {
