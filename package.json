@@ -13,7 +13,7 @@
     "deb-pack-install": "npm run clear-build && npm run package-linux && npm run create-debian-installer",
     "test": "echo \"Error: no test specified\" && exit 1",
     "pack": "electron-builder --dir",
-    "dist": "electron-builder"
+    "dist": "build"
   },
   "repository": {
     "type": "git",
@@ -33,7 +33,6 @@
     "name": "Anuj Datar",
     "email": "anuj.datar@gmail.com"
   },
-  "license": "MIT",
   "devDependencies": {
     "electron": "^4.1.2",
     "electron-builder": "^20.39.0",
@@ -51,7 +50,9 @@
       "target": [
         "AppImage",
         "deb"
-      ]
+      ],
+      "icon": "./src/images/512x512.png",
+      "asar": true
     }
   }
 }
