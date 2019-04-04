@@ -19,6 +19,32 @@ npm start
 
 ___
 
+## Building the app for debian
+Run through the entire build process with one command.
+```
+npm run deb-pack-install
+```
+
+Individual steps:
+### Step 1 - clean old dist and build folders
+  Uses [rimraf](https://github.com/isaacs/rimraf/)
+  ```
+  npm run clear-build
+  ```
+
+### Step 2 - Packaging
+  Uses [Electron Packager](https://github.com/electron-userland/electron-packager/)
+  ```
+  npm run package-linux
+  ```
+
+### Step 3 - Create installer for debian based systems
+
+  Uses [electron-installer-debian](https://github.com/electron-userland/electron-installer-debian/)
+  ```
+  npm run create-debian-installer
+  ```
+
 ## Author
 * Anuj Datar - [GitHub](https://github.com/anujdatar/)
 
@@ -28,7 +54,3 @@ This project is licensed under the MIT License - see [LICENSE](https://github.co
 
 
 **One Note** or **OneNote** the name, website, images/icons and code are the intellectual properties of [Microsoft](https://www.microsoft.com/), [One Note](https://onenote.com/).
-
-
-## P.S.
-This application can also be built for Windows and MacOS. Tested on Windows 10 and Mac OS High Sierra (10.13.6). But WhatsApp has perfectly good desktop apps built with Electron for them. So, I don't know why you would want to, but you can.
