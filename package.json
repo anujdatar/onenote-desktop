@@ -1,7 +1,8 @@
 {
-  "name": "onenote-electron",
+  "name": "onenote-desktop",
   "version": "1.0.0",
-  "description": "OneNote desktop app for Linux, using Electron",
+  "description": "OneNote desktop app for Linux",
+  "productDescription": "OneNote.com wrapped in electron packaged for Linux (debian)",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
@@ -16,7 +17,8 @@
   "devDependencies": {
     "electron": "^4.1.2",
     "electron-installer-debian": "^1.1.1",
-    "electron-packager": "^13.1.1"
+    "electron-packager": "^13.1.1",
+    "rimraf": "^2.6.3"
   },
   "dependencies": {
     "configstore": "^4.0.0",

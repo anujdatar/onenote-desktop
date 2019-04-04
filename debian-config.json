@@ -1,0 +1,14 @@
+{
+  "genericName": "onenote-desktop",
+  "section": "office",
+  "dest": "dist/installers/",
+  "icon": "./src/images/logo.png",
+  "categories": [
+    "Office",
+    "Productivity",
+    "Notes"
+  ],
+  "lintianOverrides": [
+    "changelog-file-missing-in-native-package"
+  ]
+}
