@@ -1,12 +1,12 @@
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, BrowserView } = require('electron')
+const { app, BrowserWindow, BrowserView, session } = require('electron')
 const path = require('path')
 const eStore = require('electron-store')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
-let mainView
+// let mainView
 // new electron-store obj to store window config
 const conf = new eStore()
 
@@ -18,6 +18,7 @@ function createWindow () {
     title: "One Note",
     webPreferences: {
       nodeIntegration: false,
+      contextIsolation: true,
       webviewTag: true
     }
   })
@@ -28,16 +29,16 @@ function createWindow () {
   }
 
   // open website/webapp in an Electron WebView
-  mainView = new BrowserView()
-  mainWindow.setBrowserView(mainView)
-  mainView.webContents.loadURL('https:/onenote.com/hrd')
-  // resize browserView to fill browserWindow
-  viewResizeFit(mainWindow, mainView)
+  // & resize BrowserView to fill BrowserWindow
+  // mainView = new BrowserView()
+  // mainWindow.setBrowserView(mainView)
+  // mainView.webContents.loadURL('https://onenote.com/hrd')
+  // viewResizeFit(mainWindow, mainView)
 
   // and load the index.html of the app.
   // mainWindow.loadFile(path.join(__dirname, './src/index.html'))
   // conventional way of opning a link in a browserWindow
-  // mainWindow.loadURL('https:/onenote.com/hrd')
+  mainWindow.loadURL('https://onenote.com/hrd')
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
@@ -56,7 +57,7 @@ function createWindow () {
   })
 
   mainWindow.on('resize', function () {
-    viewResizeFit(mainWindow, mainView)
+    // viewResizeFit(mainWindow, mainView)
     conf.set("windowBounds", mainWindow.getBounds())
   })
 }
@@ -72,7 +73,9 @@ function viewResizeFit(window, view) {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', createWindow)
+app.on('ready', function() {
+  createWindow()
+})
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
