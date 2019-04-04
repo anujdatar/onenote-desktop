@@ -6,13 +6,30 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
+    "clear-build": "rimraf dist/ release-builds/",
+    "package-linux": "electron-packager . onenote-desktop --overwrite --asar --platform=linux --arch=x64 --icon=./src/images/logo.png --prune=true --out=release-builds",
+    "create-debian-installer": "electron-installer-debian --src release-builds/onenote-desktop-linux-x64/ --arch amd64 --config debian-config.json",
+    "deb-pack-install": "npm run clear-build && npm run package-linux && npm run create-debian-installer",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anujdatar/onenote-electron"
+  },
+  "bugs": {
+    "url": "https://github.com/anujdatar/onenote-electron/issues"
+  },
+  "homepage": "https://github.com/anujdatar/onenote-electron#readme",
   "keywords": [
     "OneNote",
-    "Electron"
+    "Electron",
+    "Linux",
+    "desktop"
   ],
-  "author": "Anuj Datar",
+  "author": {
+    "name": "Anuj Datar",
+    "email": "anuj.datar@gmail.com"
+  },
   "license": "MIT",
   "devDependencies": {
     "electron": "^4.1.2",
