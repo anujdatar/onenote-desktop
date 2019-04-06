@@ -1,5 +1,5 @@
 {
-  "genericName": "onenote-desktop",
+  "genericName": "Microsoft note taking app",
   "section": "office",
   "dest": "dist/installers/",
   "icon": "./src/images/logo.png",
