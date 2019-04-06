@@ -11,9 +11,7 @@
     "package-linux": "electron-packager . onenote-desktop --overwrite --asar --platform=linux --arch=x64 --icon=./src/images/logo.png --prune=true --out=release-builds",
     "create-debian-installer": "electron-installer-debian --src release-builds/onenote-desktop-linux-x64/ --arch amd64 --config debian-config.json",
     "deb-pack-install": "npm run clear-build && npm run package-linux && npm run create-debian-installer",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "pack": "electron-builder --dir",
-    "dist": "electron-builder"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -36,22 +34,11 @@
   "license": "MIT",
   "devDependencies": {
     "electron": "^4.1.2",
-    "electron-builder": "^20.39.0",
     "electron-installer-debian": "^1.1.1",
     "electron-packager": "^13.1.1",
     "rimraf": "^2.6.3"
   },
   "dependencies": {
     "electron-store": "^3.0.0"
-  },
-  "build": {
-    "appId": "com.onenote.linux",
-    "linux": {
-      "category": "office",
-      "target": [
-        "AppImage",
-        "deb"
-      ]
-    }
   }
 }
