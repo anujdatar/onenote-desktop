@@ -1,6 +1,6 @@
-# One Note desktop app for linux
+# OneNote desktop app for linux
 
-  A web-app wrapped in Electron to open as a desktop app. Since linux doesn't have a lot of apps.
+  [OneNote](https://onenote.com/) web-app wrapped in Electron to open as a desktop app. Since linux doesn't have a lot of apps.
 
 ___
 This app does not modify or use any direct code from One Note. Just uses [Electron](https://github.com/electron/electron) to open a browser window, and serve it as a desktop application since Linux does not have an official releases of some apps. Uses Electron's BowserView to display third-party webpage/webapp.
@@ -11,8 +11,8 @@ ___
 
 ## Running the dev environment
 ```
-git clone https://github.com/anujdatar/onenote-electron
-cd onenote-electron
+git clone https://github.com/anujdatar/onenote-desktop
+cd onenote-desktop
 npm install
 npm start
 ```
@@ -50,7 +50,7 @@ Individual steps:
 
 
 ## License
-This project is licensed under the MIT License - see [LICENSE](https://github.com/anujdatar/onenote-electron/blob/master/LICENSE) for details.
+This project is licensed under the MIT License - see [LICENSE](https://github.com/anujdatar/onenote-desktop/LICENSE.md) for details.
 
 
 **One Note** or **OneNote** the name, website, images/icons and code are the intellectual properties of [Microsoft](https://www.microsoft.com/), [One Note](https://onenote.com/).

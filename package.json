@@ -15,12 +15,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/anujdatar/onenote-electron"
+    "url": "git+https://github.com/anujdatar/onenote-desktop"
   },
   "bugs": {
-    "url": "https://github.com/anujdatar/onenote-electron/issues"
+    "url": "https://github.com/anujdatar/onenote-desktop/issues"
   },
-  "homepage": "https://github.com/anujdatar/onenote-electron#readme",
+  "homepage": "https://github.com/anujdatar/onenote-desktop#readme",
   "keywords": [
     "OneNote",
     "Electron",

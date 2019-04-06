@@ -1,5 +1,5 @@
 {
-  "genericName": "Microsoft note taking app",
+  "genericName": "Notetaking application",
   "section": "office",
   "dest": "dist/installers/",
   "icon": "./src/images/logo.png",
