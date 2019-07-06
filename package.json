@@ -39,14 +39,14 @@
     "electron-store": "^4.0.0"
   },
   "build": {
-    "appId": "org.anuj.onenote-desktop",
+    "appId": "org.anuj.${name}",
     "asar": true,
     "copyright": "©2019 Anuj Datar",
     "linux": {
       "category": "Notes;Office;Productivity",
       "packageCategory": "Notes;Office;Productivity",
       "description": "OneNote Desktop Client for Linux",
-      "synopsis": "OneNote Desktop",
+      "synopsis": "OneNote Desktop Client",
       "icon": "./src/images/icon.icns",
       "target": [
         "deb",
