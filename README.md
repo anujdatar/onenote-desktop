@@ -32,7 +32,6 @@ npm run build
 
 * Anuj Datar - [GitHub](https://github.com/anujdatar/)
 
-
 ## License
 
 This project is licensed under the MIT License - see [LICENSE](https://github.com/anujdatar/onenote-desktop/LICENSE.md) for details.

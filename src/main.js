@@ -20,19 +20,23 @@ function createWindow () {
       contextIsolation: true
     }
   })
+  
+  // hide default application menubar
+  mainWindow.setMenuBarVisibility(false)
 
   // set window bounds based on stored config
   if (typeof conf.get('windowBounds') !== 'undefined') {
     mainWindow.setBounds(conf.get('windowBounds'))
   }
 
-  // conventional way of opning a link in a browserWindow
+  // open web-app link in a browserWindow
+  // check if last visited link is stored configStore
+  // else load default link at startup
   if (typeof conf.get('lastLink') === 'undefined'){
     mainWindow.loadURL('https://onenote.com/')
   } else {
     mainWindow.loadURL(conf.get('lastLink'))
   }
-  
 
   // Emitted when the window is going to be closed
   mainWindow.on('close', function() {
@@ -49,12 +53,6 @@ function createWindow () {
   mainWindow.on('resize', function () {
     conf.set("windowBounds", mainWindow.getBounds())
   })
-
-  // log link once page is completely loaded
-  // mainWindow.webContents.on('did-stop-loading', function() {
-  //   console.log(mainWindow.webContents.getURL())
-  //   conf.set("lastLink", mainWindow.webContents.getURL())
-  // })
 }
 
 // This method will be called when Electron has finished
@@ -65,13 +63,6 @@ app.on('ready', function() {
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
-  // clears service worker before close
-  // makes new window register new service worker
-  // otherwise you get the WhatsApp browser version error
-  mainWindow.webContents.unregisterServiceWorker(() => {
-    console.log('Goodbye!!')
-  })
-
   // On macOS it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== 'darwin') app.quit()
@@ -89,7 +80,6 @@ app.on('web-contents-created', (event, contents) => {
     // In this example, we'll ask the operating system
     // to open this event's url in the default browser.
     event.preventDefault()
-
     shell.openExternal(navigationUrl)
   })
 })
