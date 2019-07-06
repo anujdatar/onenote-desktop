@@ -41,7 +41,7 @@
   "build": {
     "appId": "org.anuj.${name}",
     "asar": true,
-    "copyright": "©2019 Anuj Datar",
+    "copyright": "MIT ©2019 Anuj Datar",
     "linux": {
       "category": "Notes;Office;Productivity",
       "packageCategory": "Notes;Office;Productivity",
@@ -50,7 +50,8 @@
       "icon": "./src/images/icon.icns",
       "target": [
         "deb",
-        "AppImage"
+        "AppImage",
+        "snap"
       ],
       "maintainer": "Anuj Datar <anuj.datar@gmail.com>",
       "artifactName": "${productName}-${version}-${arch}.${ext}"

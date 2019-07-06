@@ -1,6 +1,6 @@
 # OneNote desktop app for linux
 
-  [OneNote](https://onenote.com/) web-app wrapped in Electron to open as a desktop app. Since linux doesn't have a lot of apps.
+  [OneNote](https://onenote.com/) web-app wrapped in Electron to open as a desktop app. Since linux doesn't have the same app I use on a regular basis.
 
 ___
 This app does not modify or use any direct code from One Note. Just uses [Electron](https://github.com/electron/electron) to open a browser window, and serve it as a desktop application since Linux does not have an official releases of some apps. Uses Electron's BowserView to display third-party webpage/webapp.
