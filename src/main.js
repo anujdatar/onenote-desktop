@@ -29,13 +29,14 @@ function createWindow () {
     mainWindow.setBounds(conf.get('windowBounds'))
   }
 
-  // conventional way of opning a link in a browserWindow
+  // open web-app link in a browserWindow
+  // check if last visited link is stored configStore
+  // else load default link at startup
   if (typeof conf.get('lastLink') === 'undefined'){
     mainWindow.loadURL('https://onenote.com/')
   } else {
     mainWindow.loadURL(conf.get('lastLink'))
   }
-  
 
   // Emitted when the window is going to be closed
   mainWindow.on('close', function() {
@@ -52,12 +53,6 @@ function createWindow () {
   mainWindow.on('resize', function () {
     conf.set("windowBounds", mainWindow.getBounds())
   })
-
-  // log link once page is completely loaded
-  // mainWindow.webContents.on('did-stop-loading', function() {
-  //   console.log(mainWindow.webContents.getURL())
-  //   conf.set("lastLink", mainWindow.webContents.getURL())
-  // })
 }
 
 // This method will be called when Electron has finished
