@@ -13,7 +13,7 @@ const conf = new eStore()
 function createWindow () {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    icon: path.join(__dirname, './src/images/logo.png'),
+    icon: path.join(__dirname, './images/icon.png'),
     title: "OneNote",
     webPreferences: {
       nodeIntegration: false,
