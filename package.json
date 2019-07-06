@@ -1,7 +1,7 @@
 {
   "name": "onenote-desktop",
   "productName": "OneNote",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "OneNote Desktop Client for Linux",
   "productDescription": "OneNote.com wrapped in electron packaged for Linux",
   "main": "./src/main.js",
