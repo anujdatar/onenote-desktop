@@ -63,13 +63,6 @@ app.on('ready', function() {
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
-  // clears service worker before close
-  // makes new window register new service worker
-  // otherwise you get the WhatsApp browser version error
-  mainWindow.webContents.unregisterServiceWorker(() => {
-    console.log('Goodbye!!')
-  })
-
   // On macOS it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== 'darwin') app.quit()
