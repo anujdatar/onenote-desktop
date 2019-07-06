@@ -1,5 +1,5 @@
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, shell } = require('electron')
+const { app, BrowserWindow, Menu, shell } = require('electron')
 const path = require('path')
 const eStore = require('electron-store')
 
@@ -20,6 +20,9 @@ function createWindow () {
       contextIsolation: true
     }
   })
+  
+  // hide default application menubar
+  mainWindow.setMenuBarVisibility(false)
 
   // set window bounds based on stored config
   if (typeof conf.get('windowBounds') !== 'undefined') {
@@ -89,7 +92,6 @@ app.on('web-contents-created', (event, contents) => {
     // In this example, we'll ask the operating system
     // to open this event's url in the default browser.
     event.preventDefault()
-
     shell.openExternal(navigationUrl)
   })
 })
