@@ -10,7 +10,8 @@ Started because I prefer using separate apps, and not opening everything in my b
 ___
 
 ## Running the dev environment
-```
+
+```bash
 git clone https://github.com/anujdatar/onenote-desktop
 cd onenote-desktop
 npm install
@@ -20,37 +21,20 @@ npm start
 ___
 
 ## Building the app for debian
-Run through the entire build process with one command.
+
+Run through the entire build process with one command. (Now using electron-builder)
+
+```bash
+npm run build
 ```
-npm run deb-pack-install
-```
-
-Individual steps:
-### Step 1 - clean old dist and build folders
-  Uses [rimraf](https://github.com/isaacs/rimraf/)
-  ```
-  npm run clear-build
-  ```
-
-### Step 2 - Packaging
-  Uses [Electron Packager](https://github.com/electron-userland/electron-packager/)
-  ```
-  npm run package-linux
-  ```
-
-### Step 3 - Create installer for debian based systems
-
-  Uses [electron-installer-debian](https://github.com/electron-userland/electron-installer-debian/)
-  ```
-  npm run create-debian-installer
-  ```
 
 ## Author
+
 * Anuj Datar - [GitHub](https://github.com/anujdatar/)
 
 
 ## License
-This project is licensed under the MIT License - see [LICENSE](https://github.com/anujdatar/onenote-desktop/LICENSE.md) for details.
 
+This project is licensed under the MIT License - see [LICENSE](https://github.com/anujdatar/onenote-desktop/LICENSE.md) for details.
 
 **One Note** or **OneNote** the name, website, images/icons and code are the intellectual properties of [Microsoft](https://www.microsoft.com/), [One Note](https://onenote.com/).

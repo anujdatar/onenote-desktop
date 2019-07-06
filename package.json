@@ -1,17 +1,15 @@
 {
   "name": "onenote-desktop",
   "productName": "OneNote",
-  "version": "1.0.0",
-  "description": "OneNote desktop app for Linux",
-  "productDescription": "OneNote.com wrapped in electron packaged for Linux (debian)",
-  "main": "main.js",
+  "version": "1.1.0",
+  "description": "OneNote Desktop Client for Linux",
+  "productDescription": "OneNote.com wrapped in electron packaged for Linux",
+  "main": "./src/main.js",
   "scripts": {
-    "start": "electron .",
-    "clear-build": "rimraf dist/ release-builds/",
-    "package-linux": "electron-packager . onenote-desktop --overwrite --asar --platform=linux --arch=x64 --icon=./src/images/logo.png --prune=true --out=release-builds",
-    "create-debian-installer": "electron-installer-debian --src release-builds/onenote-desktop-linux-x64/ --arch amd64 --config debian-config.json",
-    "deb-pack-install": "npm run clear-build && npm run package-linux && npm run create-debian-installer",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "electron ./src/main.js",
+    "clean-slate": "rimraf dist/ release-builds/",
+    "pack": "electron-builder --dir",
+    "build": "electron-builder"
   },
   "repository": {
     "type": "git",
@@ -25,7 +23,7 @@
     "OneNote",
     "Electron",
     "Linux",
-    "desktop"
+    "desktopApp"
   ],
   "author": {
     "name": "Anuj Datar",
@@ -33,12 +31,39 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "electron": "^4.1.4",
-    "electron-installer-debian": "^1.1.1",
-    "electron-packager": "^13.1.1",
+    "electron": "^5.0.6",
+    "electron-builder": "^20.44.4",
     "rimraf": "^2.6.3"
   },
   "dependencies": {
-    "electron-store": "^3.1.0"
+    "electron-store": "^4.0.0"
+  },
+  "build": {
+    "appId": "org.anuj.onenote-desktop",
+    "asar": true,
+    "copyright": "©2019 Anuj Datar",
+    "linux": {
+      "category": "Notes;Office;Productivity",
+      "packageCategory": "Notes;Office;Productivity",
+      "description": "OneNote Desktop Client for Linux",
+      "synopsis": "OneNote Desktop",
+      "icon": "./src/images/icon.icns",
+      "target": [
+        "deb",
+        "AppImage"
+      ],
+      "maintainer": "Anuj Datar <anuj.datar@gmail.com>",
+      "artifactName": "${productName}-${version}-${arch}.${ext}"
+    },
+    "deb": {
+      "depends": [
+        "gconf2",
+        "gconf-service",
+        "libnotify4",
+        "libappindicator1",
+        "libxtst6",
+        "libnss3"
+      ]
+    }
   }
 }
