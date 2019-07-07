@@ -9,7 +9,8 @@
     "start": "electron ./src/main.js",
     "clean-slate": "rimraf dist/ release-builds/",
     "pack": "electron-builder --dir",
-    "build": "electron-builder"
+    "build": "electron-builder",
+    "snap": "build --linux snap"
   },
   "repository": {
     "type": "git",
