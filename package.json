@@ -1,16 +1,15 @@
 {
   "name": "onenote-desktop",
   "productName": "OneNote",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "OneNote Desktop Client for Linux",
   "productDescription": "OneNote.com wrapped in electron packaged for Linux",
   "main": "./src/main.js",
   "scripts": {
     "start": "electron ./src/main.js",
-    "clean-slate": "rimraf dist/ release-builds/",
+    "clean-slate": "rimraf dist/ parts/ prime/ stage/ *.snap",
     "pack": "electron-builder --dir",
-    "build": "electron-builder",
-    "snap": "build --linux snap"
+    "build": "electron-builder"
   },
   "repository": {
     "type": "git",
@@ -55,7 +54,7 @@
         "snap"
       ],
       "maintainer": "Anuj Datar <anuj.datar@gmail.com>",
-      "artifactName": "${productName}-${version}-${arch}.${ext}"
+      "artifactName": "${name}-${version}-${arch}.${ext}"
     },
     "deb": {
       "depends": [
@@ -66,6 +65,13 @@
         "libxtst6",
         "libnss3"
       ]
+    },
+    "snap": {
+      "confinement": "classic",
+      "grade": "stable"
+    },
+    "appImage": {
+      "license": "LICENSE.md"
     }
   }
 }
