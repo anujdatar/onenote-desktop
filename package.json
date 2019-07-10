@@ -9,7 +9,9 @@
     "start": "electron ./src/main.js",
     "clean-slate": "rimraf dist/ parts/ prime/ stage/ *.snap",
     "pack": "electron-builder --dir",
-    "build": "electron-builder"
+    "build": "electron-builder",
+    "electron-package": "electron-packager . onenote-desktop --overwrite --asar --platform=linux --arch=x64 --icon=./src/images/icon.png --prune=true --out=dist/",
+    "tar-package": "cd dist/ && tar -cvzf onenote.tar.gz onenote-desktop-linux-x64"
   },
   "repository": {
     "type": "git",
@@ -33,6 +35,7 @@
   "devDependencies": {
     "electron": "^5.0.6",
     "electron-builder": "^20.44.4",
+    "electron-packager": "^14.0.1",
     "rimraf": "^2.6.3"
   },
   "dependencies": {
@@ -49,6 +52,7 @@
       "synopsis": "OneNote Desktop Client",
       "icon": "./src/images/icon.icns",
       "target": [
+        "dir",
         "deb",
         "AppImage",
         "snap"
