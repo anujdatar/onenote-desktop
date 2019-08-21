@@ -1,7 +1,7 @@
 {
   "name": "onenote-desktop",
   "productName": "OneNote",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "description": "OneNote Desktop Client for Linux",
   "productDescription": "OneNote.com wrapped in electron packaged for Linux",
   "main": "./src/main.js",
@@ -39,7 +39,7 @@
     "rimraf": "^2.6.3"
   },
   "dependencies": {
-    "electron-store": "^4.0.0"
+    "@anujdatar/electron-appconfig": "^1.1.2"
   },
   "build": {
     "appId": "org.anuj.${name}",
@@ -53,9 +53,9 @@
       "icon": "./src/images/icon.icns",
       "target": [
         "dir",
+        "snap",
         "deb",
-        "AppImage",
-        "snap"
+        "appImage"
       ],
       "maintainer": "Anuj Datar <anuj.datar@gmail.com>",
       "artifactName": "${name}-${version}-${arch}.${ext}"
@@ -71,7 +71,7 @@
       ]
     },
     "snap": {
-      "confinement": "classic",
+      "confinement": "strict",
       "grade": "stable"
     },
     "appImage": {

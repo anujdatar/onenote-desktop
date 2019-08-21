@@ -1,13 +1,13 @@
 // Modules to control application life and create native browser window
 const { app, BrowserWindow, shell } = require('electron')
 const path = require('path')
-const eStore = require('electron-store')
+const ConfigStore = require('@anujdatar/electron-appconfig')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
 // new electron-store obj to store window config
-const conf = new eStore()
+const conf = new ConfigStore()
 
 
 function createWindow () {
@@ -23,7 +23,7 @@ function createWindow () {
   
   // hide default application menubar
   mainWindow.setMenuBarVisibility(false)
-
+  
   // set window bounds based on stored config
   if (typeof conf.get('windowBounds') !== 'undefined') {
     mainWindow.setBounds(conf.get('windowBounds'))
