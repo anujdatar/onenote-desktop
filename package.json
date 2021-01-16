@@ -50,7 +50,7 @@
       "packageCategory": "Notes;Office;Productivity",
       "description": "OneNote Desktop Client for Linux",
       "synopsis": "OneNote Desktop Client",
-      "icon": "./src/images/icon.icns",
+      "icon": "./src/images/icon.png",
       "target": [
         "dir",
         "snap",
