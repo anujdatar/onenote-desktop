@@ -36,7 +36,7 @@
     "electron": "^11.2.0",
     "electron-builder": "^22.9.1",
     "electron-packager": "^15.2.0",
-    "rimraf": "^2.6.3"
+    "rimraf": "^3.0.2"
   },
   "dependencies": {
     "@anujdatar/electron-appconfig": "^1.1.2"
