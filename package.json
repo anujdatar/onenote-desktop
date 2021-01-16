@@ -9,7 +9,7 @@
     "start": "electron ./src/main.js",
     "clean-slate": "rimraf dist/ parts/ prime/ stage/ *.snap",
     "pack": "electron-builder --dir",
-    "build": "electron-builder",
+    "build": "npm run clean-slate && electron-builder",
     "electron-package": "electron-packager . onenote-desktop --overwrite --asar --platform=linux --arch=x64 --icon=./src/images/icon.png --prune=true --out=dist/",
     "tar-package": "cd dist/ && tar -cvzf onenote.tar.gz onenote-desktop-linux-x64"
   },
