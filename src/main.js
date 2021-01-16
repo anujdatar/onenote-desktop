@@ -33,7 +33,7 @@ function createWindow () {
   // check if last visited link is stored configStore
   // else load default link at startup
   if (typeof conf.get('lastLink') === 'undefined'){
-    mainWindow.loadURL('https://onenote.com/')
+    mainWindow.loadURL('https://www.onenote.com/notebooks')
   } else {
     mainWindow.loadURL(conf.get('lastLink'))
   }
