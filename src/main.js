@@ -77,9 +77,12 @@ app.on('activate', function () {
 // Limit/disable the creation of additional windows
 app.on('web-contents-created', (event, contents) => {
   contents.on('new-window', (event, navigationUrl) => {
-    // In this example, we'll ask the operating system
-    // to open this event's url in the default browser.
     event.preventDefault()
-    shell.openExternal(navigationUrl)
+
+    // open url in your default internet browser
+    // shell.openExternal(navigationUrl)
+
+    // open url in the current Electron window
+    mainWindow.loadURL(navigationUrl)
   })
 })
