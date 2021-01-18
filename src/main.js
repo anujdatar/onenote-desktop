@@ -1,5 +1,5 @@
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, shell } = require('electron')
+const { app, BrowserWindow } = require('electron')
 const path = require('path')
 const ConfigStore = require('electron-store')
 
@@ -80,6 +80,7 @@ app.on('web-contents-created', (event, contents) => {
     event.preventDefault()
 
     // open url in your default internet browser
+    // too re-enable import shell along with other electron components
     // shell.openExternal(navigationUrl)
 
     // open url in the current Electron window
