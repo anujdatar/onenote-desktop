@@ -1,7 +1,7 @@
 // Modules to control application life and create native browser window
 const { app, BrowserWindow, shell } = require('electron')
 const path = require('path')
-const ConfigStore = require('@anujdatar/electron-appconfig')
+const ConfigStore = require('electron-store')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -33,7 +33,7 @@ function createWindow () {
   // check if last visited link is stored configStore
   // else load default link at startup
   if (typeof conf.get('lastLink') === 'undefined'){
-    mainWindow.loadURL('https://onenote.com/')
+    mainWindow.loadURL('https://www.onenote.com/notebooks')
   } else {
     mainWindow.loadURL(conf.get('lastLink'))
   }
