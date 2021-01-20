@@ -1,7 +1,8 @@
 // Modules to control application life and create native browser window
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, Menu } = require('electron')
 const path = require('path')
 const ConfigStore = require('electron-store')
+const { menuTemplate } = require('./menu')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -9,20 +10,21 @@ let mainWindow
 // new electron-store obj to store window config
 const conf = new ConfigStore()
 
+// build application menubar
+const menu = Menu.buildFromTemplate(menuTemplate)
+Menu.setApplicationMenu(menu)
 
 function createWindow () {
   // Create the browser window.
   mainWindow = new BrowserWindow({
     icon: path.join(__dirname, './images/icon.png'),
     title: "OneNote",
+    autoHideMenuBar: true,
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true
     }
   })
-  
-  // hide default application menubar
-  mainWindow.setMenuBarVisibility(false)
   
   // set window bounds based on stored config
   if (typeof conf.get('windowBounds') !== 'undefined') {
@@ -78,10 +80,6 @@ app.on('activate', function () {
 app.on('web-contents-created', (event, contents) => {
   contents.on('new-window', (event, navigationUrl) => {
     event.preventDefault()
-
-    // open url in your default internet browser
-    // too re-enable import shell along with other electron components
-    // shell.openExternal(navigationUrl)
 
     // open url in the current Electron window
     mainWindow.loadURL(navigationUrl)
