@@ -9,9 +9,7 @@
     "start": "electron ./src/main.js",
     "clean-slate": "rimraf dist/ parts/ prime/ stage/ *.snap",
     "pack": "electron-builder --dir",
-    "build": "npm run clean-slate && electron-builder",
-    "electron-package": "electron-packager . onenote-desktop --overwrite --asar --platform=linux --arch=x64 --icon=./src/images/icon.png --prune=true --out=dist/",
-    "tar-package": "cd dist/ && tar -cvzf onenote.tar.gz onenote-desktop-linux-x64"
+    "build": "npm run clean-slate && electron-builder"
   },
   "repository": {
     "type": "git",
@@ -33,14 +31,11 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "electron": "^11.2.0",
-    "electron-builder": "^22.9.1",
-    "electron-packager": "^15.2.0",
+    "electron": "^12.0.1",
+    "electron-builder": "^22.10.5",
     "rimraf": "^3.0.2"
   },
-  "dependencies": {
-    "electron-store": "^6.0.1"
-  },
+  "dependencies": {},
   "build": {
     "appId": "org.anuj.${name}",
     "asar": true,
