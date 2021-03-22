@@ -1,7 +1,7 @@
 // Modules to control application life and create native browser window
 const { app, BrowserWindow, Menu } = require('electron')
 const path = require('path')
-const ConfigStore = require('electron-store')
+const ConfigStore = require('@anujdatar/appconfig')
 const { menuTemplate } = require('./menu')
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -18,14 +18,14 @@ function createWindow () {
   // Create the browser window.
   mainWindow = new BrowserWindow({
     icon: path.join(__dirname, './images/icon.png'),
-    title: "OneNote",
+    title: 'OneNote',
     autoHideMenuBar: true,
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true
     }
   })
-  
+
   // set window bounds based on stored config
   if (typeof conf.get('windowBounds') !== 'undefined') {
     mainWindow.setBounds(conf.get('windowBounds'))
@@ -34,16 +34,16 @@ function createWindow () {
   // open web-app link in a browserWindow
   // check if last visited link is stored configStore
   // else load default link at startup
-  if (typeof conf.get('lastLink') === 'undefined'){
+  if (typeof conf.get('lastLink') === 'undefined') {
     mainWindow.loadURL('https://www.onenote.com/notebooks')
   } else {
     mainWindow.loadURL(conf.get('lastLink'))
   }
 
   // Emitted when the window is going to be closed
-  mainWindow.on('close', function() {
+  mainWindow.on('close', function () {
     conf.set('windowBounds', mainWindow.getBounds())
-    conf.set("lastLink", mainWindow.webContents.getURL())
+    conf.set('lastLink', mainWindow.webContents.getURL())
   })
 
   // Emitted when the window is closed.
@@ -53,13 +53,13 @@ function createWindow () {
   })
 
   mainWindow.on('resize', function () {
-    conf.set("windowBounds", mainWindow.getBounds())
+    conf.set('windowBounds', mainWindow.getBounds())
   })
 }
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
-app.on('ready', function() {
+app.on('ready', function () {
   createWindow()
 })
 

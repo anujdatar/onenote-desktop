@@ -35,7 +35,9 @@
     "electron-builder": "^22.10.5",
     "rimraf": "^3.0.2"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@anujdatar/appconfig": "^2.1.2-dev.2"
+  },
   "build": {
     "appId": "org.anuj.${name}",
     "asar": true,
