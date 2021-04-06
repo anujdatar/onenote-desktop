@@ -7,7 +7,7 @@ const appDefaults = {
   homepage: 'https://www.onenote.com/notebooks',
   autoHideMenuBar: false,
   minimizeToTray: false,
-  closeToTray: true
+  closeToTray: false
 }
 
 // global reference of the window object
