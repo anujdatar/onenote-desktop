@@ -55,6 +55,13 @@ function createWindow () {
   mainWindow.on('resize', function () {
     conf.set('windowBounds', mainWindow.getBounds())
   })
+
+  mainWindow.webContents.on('did-finish-load', () => {
+    // enable/disable menu items once page is loaded
+    // webcontents are undefined before this
+    toggleForwardMenuItem()
+    toggleBackMenuItem()
+  })
 }
 
 // This method will be called when Electron has finished
@@ -120,6 +127,15 @@ const showAppResetConfirmation = function () {
   })
 }
 
+const toggleForwardMenuItem = function () {
+  const forwardItem = menu.getMenuItemById('go-forward')
+  forwardItem.enabled = mainWindow.webContents.canGoForward()
+}
+const toggleBackMenuItem = function () {
+  const backItem = menu.getMenuItemById('go-back')
+  backItem.enabled = mainWindow.webContents.canGoBack()
+}
+
 /* ******************** Menu Template ************************ */
 const menuTemplate = [
   {
@@ -127,12 +143,14 @@ const menuTemplate = [
     submenu: [
       {
         label: 'Forward',
+        id: 'go-forward',
         click () {
           mainWindow.webContents.goForward()
         }
       },
       {
         label: 'Back',
+        id: 'go-back',
         click () {
           mainWindow.webContents.goBack()
         }
