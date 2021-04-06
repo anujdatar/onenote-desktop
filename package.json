@@ -23,7 +23,10 @@
     "OneNote",
     "Electron",
     "Linux",
-    "desktopApp"
+    "desktopApp",
+    "Notes",
+    "WebApp",
+    "Scratchpad"
   ],
   "author": {
     "name": "Anuj Datar",
@@ -36,7 +39,7 @@
     "rimraf": "^3.0.2"
   },
   "dependencies": {
-    "@anujdatar/appconfig": "^2.1.2-dev.2"
+    "@anujdatar/appconfig": "^2.2.0"
   },
   "build": {
     "appId": "org.anuj.${name}",
