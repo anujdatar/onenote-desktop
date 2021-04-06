@@ -275,7 +275,9 @@ const menuTemplate = [
       },
       {
         label: 'Reset App',
-        click: showAppResetConfirmation
+        click () {
+          showAppResetConfirmation()
+        }
       }
     ]
   }
