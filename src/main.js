@@ -133,6 +133,24 @@ const toggleBackMenuItem = function () {
   backItem.enabled = mainWindow.webContents.canGoBack()
 }
 
+const toggleBooleanConf = function (setting) {
+  const current_conf_value = conf.get(setting)
+  conf.set(setting, !current_conf_value)
+  return !current_conf_value
+}
+
+const toggleMenuVisibility = function () {
+  const newValue = toggleBooleanConf('autoHideMenuBar')
+  mainWindow.setAutoHideMenuBar(newValue)
+  mainWindow.setMenuBarVisibility(!newValue)
+}
+const toggleMinimizeToTray = function () {
+  toggleBooleanConf('minimizeToTray')
+}
+const toggleCloseToTray = function () {
+  toggleBooleanConf('closeToTray')
+}
+
 /* ******************** Menu Template ************************ */
 const menuTemplate = [
   {
@@ -212,6 +230,35 @@ const menuTemplate = [
       },
       {
         role: 'toggledevtools'
+      }
+    ]
+  },
+  {
+    label: 'Settings',
+    submenu: [
+      {
+        label: 'Auto-hide Menu Bar',
+        type: 'checkbox',
+        checked: conf.get('autoHideMenuBar'),
+        click () {
+          toggleMenuVisibility()
+        }
+      },
+      {
+        label: 'Minimize to Tray',
+        type: 'checkbox',
+        checked: conf.get('minimizeToTray'),
+        click () {
+          toggleMinimizeToTray()
+        }
+      },
+      {
+        label: 'Close to Tray',
+        type: 'checkbox',
+        checked: conf.get('closeToTray'),
+        click () {
+          toggleCloseToTray()
+        }
       }
     ]
   },
