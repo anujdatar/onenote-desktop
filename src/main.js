@@ -1,25 +1,25 @@
-// Modules to control application life and create native browser window
-const { app, BrowserWindow, Menu } = require('electron')
+const { app, BrowserWindow, Menu, shell, dialog } = require('electron')
 const path = require('path')
 const ConfigStore = require('@anujdatar/appconfig')
-const { menuTemplate } = require('./menu')
 
-// Keep a global reference of the window object, if you don't, the window will
-// be closed automatically when the JavaScript object is garbage collected.
+// define app defaults
+const appDefaults = {
+  homepage: 'https://www.onenote.com/notebooks',
+  autoHideMenuBar: false,
+  minimizeToTray: false,
+  closeToTray: true
+}
+
+// global reference of the window object
 let mainWindow
-// new electron-store obj to store window config
-const conf = new ConfigStore()
-
-// build application menubar
-const menu = Menu.buildFromTemplate(menuTemplate)
-Menu.setApplicationMenu(menu)
+// persistent app configs
+const conf = new ConfigStore({ defaults: appDefaults })
 
 function createWindow () {
-  // Create the browser window.
   mainWindow = new BrowserWindow({
     icon: path.join(__dirname, './images/icon.png'),
     title: 'OneNote',
-    autoHideMenuBar: true,
+    autoHideMenuBar: conf.get('autoHideMenuBar'),
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true
@@ -31,13 +31,13 @@ function createWindow () {
     mainWindow.setBounds(conf.get('windowBounds'))
   }
 
-  // open web-app link in a browserWindow
-  // check if last visited link is stored configStore
-  // else load default link at startup
+  // open app link (last visited/homepage)
   if (typeof conf.get('lastLink') === 'undefined') {
-    mainWindow.loadURL('https://www.onenote.com/notebooks')
+    mainWindow.loadURL(conf.get('homepage'))
   } else {
     mainWindow.loadURL(conf.get('lastLink'))
+    // mainWindow.loadURL('https://www.google.com')
+    // mainWindow.loadURL('https://www.onenote.com/notebooks')
   }
 
   // Emitted when the window is going to be closed
@@ -77,11 +77,148 @@ app.on('activate', function () {
 })
 
 // Limit/disable the creation of additional windows
+// mainWindow.webContents.setWindowOpenHandler doesn't yet work on OneNote
 app.on('web-contents-created', (event, contents) => {
-  contents.on('new-window', (event, navigationUrl) => {
+  contents.on('new-window', (event, url) => {
     event.preventDefault()
-
-    // open url in the current Electron window
-    mainWindow.loadURL(navigationUrl)
+    if (url.startsWith('https://onedrive.live.com')) {
+      // open onedrive / onenote links in main window
+      mainWindow.loadURL(url)
+    } else {
+      // open non onenote links in system default browser
+      shell.openExternal(url)
+    }
   })
 })
+
+/* ******************** Menu Functions *********************** */
+const doAppReset = function () {
+  const fs = require('fs')
+  const getAppPath = path.join(app.getPath('userData'))
+  fs.rmdir(getAppPath, { recursive: true }, err => {
+    if (err) console.log(err)
+    else {
+      console.log('Resetting app')
+      app.relaunch()
+      app.exit()
+    }
+  })
+}
+
+const showAppResetConfirmation = function () {
+  const options = {
+    type: 'question',
+    buttons: ['Yes', 'No'],
+    defaultId: 1,
+    title: 'App Reset Confirmation',
+    message: 'Are you sure you want to reset the application?'
+  }
+  dialog.showMessageBox(mainWindow, options).then(result => {
+    if (result.response === 0) {
+      doAppReset()
+    }
+  })
+}
+
+/* ******************** Menu Template ************************ */
+const menuTemplate = [
+  {
+    label: 'Navigate',
+    submenu: [
+      {
+        label: 'Forward',
+        click () {
+          mainWindow.webContents.goForward()
+        }
+      },
+      {
+        label: 'Back',
+        click () {
+          mainWindow.webContents.goBack()
+        }
+      },
+      {
+        type: 'separator'
+      },
+      {
+        label: 'OneNote Home',
+        click () {
+          mainWindow.webContents.loadURL(conf.get('homepage'))
+        }
+      }
+    ]
+  },
+  {
+    label: 'Edit',
+    submenu: [
+      {
+        role: 'copy'
+      },
+      {
+        role: 'cut'
+      },
+      {
+        role: 'paste'
+      },
+      {
+        type: 'separator'
+      },
+      {
+        role: 'undo'
+      },
+      {
+        role: 'redo'
+      }
+    ]
+  },
+  {
+    label: 'View',
+    submenu: [
+      {
+        role: 'reload'
+      },
+      {
+        type: 'separator'
+      },
+      {
+        role: 'zoomin'
+      },
+      {
+        role: 'zoomout'
+      },
+      {
+        role: 'resetzoom'
+      },
+      {
+        type: 'separator'
+      },
+      {
+        role: 'togglefullscreen'
+      },
+      {
+        role: 'toggledevtools'
+      }
+    ]
+  },
+  {
+    label: 'Help',
+    submenu: [
+      {
+        label: 'Report Issue/Bug',
+        click () {
+          shell.openExternal(
+            'https://github.com/anujdatar/onenote-desktop/issues/new/choose'
+          )
+        }
+      },
+      {
+        label: 'Reset App',
+        click: showAppResetConfirmation
+      }
+    ]
+  }
+]
+
+// build application menubar
+const menu = Menu.buildFromTemplate(menuTemplate)
+Menu.setApplicationMenu(menu)
