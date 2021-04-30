@@ -1,0 +1,81 @@
+@font-face {
+  font-family: ubuntu;
+  src: url(Ubuntu-Regular.ttf);
+}
+
+body {
+  padding-left: 10px;
+  padding-right: 10px;
+  overflow-x: hidden;
+  background-color: var(--gh-bg);
+  color: var(--gh-text);
+  line-height: 1.5;
+  font-size: 0.9em;
+  font-family: 'ubuntu';
+  --gh-bg: #0d1117;
+  --gh-inline: #2f333a;
+  --gh-code-bg: #161b22;
+  --gh-link-text: #58a6ff;
+  --gh-text: #c9cbcc;
+  --gh-code-text: #f0f6fc;
+}
+.header {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}
+.header div {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* height: 4em;
+  width: 4em; */
+}
+a {
+  text-decoration: none;
+  color: var(--gh-link-text);
+}
+button.close {
+  cursor: pointer;
+  text-decoration: none;
+  font-family: monospace;
+  font-size: 3em;
+  color: var(--gh-text);
+  padding: 0px 9px;
+  background-color: var(--gh-inline);
+  border-radius: 8px;
+  border: 0;
+}
+button.close:hover {
+  color: white;
+}
+
+mark {
+  font-family: monospace;
+  background-color: var(--gh-inline);
+  color: var(--gh-inline-text);
+  padding: 2px 5px;
+  border-radius: 5px;
+}
+
+p.code {
+  background-color: var(--gh-code-bg);
+  color: var(--gh-code-text);
+  padding: 10px;
+  border-radius: 10px;
+  font-family: monospace;
+}
+
+ol {
+  line-height: 2;
+}
+
+ul {
+  line-height: 2;
+}
+
+strong {
+  color: purple;
+}
