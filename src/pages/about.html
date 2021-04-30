@@ -72,8 +72,6 @@
   </ul>
 
   <script>
-    const { ipcRenderer } = require("electron")
-
     // handle window close button
     function closeAbout () {
       ipcRenderer.send('close-about-page', 'closing-about-page')
