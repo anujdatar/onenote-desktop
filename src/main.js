@@ -1,19 +1,24 @@
-const { app, BrowserWindow, Menu, shell, dialog } = require('electron')
+const { app, BrowserWindow, Menu, shell, ipcMain, dialog } = require('electron')
 const path = require('path')
 const ConfigStore = require('@anujdatar/appconfig')
 
-// define app defaults
+const showAboutWindow = require('./about')
+
+// app defaults
 const appDefaults = {
   homepage: 'https://www.onenote.com/notebooks',
   autoHideMenuBar: false,
   minimizeToTray: false,
-  closeToTray: false
+  closeToTray: false,
+  showWelcomePage: true
 }
 
-// global reference of the window object
-let mainWindow
-// persistent app configs
+// persistent app config
 const conf = new ConfigStore({ defaults: appDefaults })
+
+// global reference for the window objects
+let mainWindow
+let aboutWindow
 
 function createWindow () {
   mainWindow = new BrowserWindow({
@@ -278,6 +283,13 @@ const menuTemplate = [
     label: 'Help',
     submenu: [
       {
+        label: 'About',
+        click () {
+          aboutWindow = showAboutWindow(mainWindow)
+        }
+      },
+      { type: 'separator' },
+      {
         label: 'Report Issue/Bug',
         click () {
           shell.openExternal(
@@ -298,3 +310,18 @@ const menuTemplate = [
 // build application menubar
 const menu = Menu.buildFromTemplate(menuTemplate)
 Menu.setApplicationMenu(menu)
+
+// update welcome page toggle state from renderer
+ipcMain.on('toggle-welcome-page-state', (event, value) => {
+  conf.set('showWelcomePage', value)
+})
+
+// send welcome page toggle state on startup
+ipcMain.on('welcome-toggle-state', event => {
+  event.reply('welcome-toggle-state-reply', conf.get('showWelcomePage'))
+})
+
+// close about window
+ipcMain.on('close-about-page', () => {
+  aboutWindow.close()
+})
