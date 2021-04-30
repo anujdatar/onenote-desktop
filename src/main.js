@@ -3,6 +3,11 @@ const path = require('path')
 const ConfigStore = require('@anujdatar/appconfig')
 
 const showAboutWindow = require('./about')
+const packageData = require('../package.json')
+
+// app version
+const appVersion = packageData.version
+// console.log(appVersion)
 
 // app defaults
 const appDefaults = {
@@ -319,6 +324,11 @@ ipcMain.on('toggle-welcome-page-state', (event, value) => {
 // send welcome page toggle state on startup
 ipcMain.on('welcome-toggle-state', event => {
   event.reply('welcome-toggle-state-reply', conf.get('showWelcomePage'))
+})
+
+// send app version to about page
+ipcMain.on('get-app-version', (event, message) => {
+  event.returnValue = appVersion
 })
 
 // close about window

@@ -8,7 +8,8 @@
   <link rel="stylesheet" href="style.css">
   <base href="./">
   <script>
-    const appVersion = '1.4.0-dev'
+    const { ipcRenderer } = require("electron")
+    const appVersion = ipcRenderer.sendSync('get-app-version', 'getting-app-version')
     function writeVer() {
       document.write(appVersion)
     }
