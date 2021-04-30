@@ -26,11 +26,12 @@ function createWindow () {
     }
   })
 
-  // set window bounds based on stored config
+  // set window bounds on launch
   if (typeof conf.get('windowBounds') !== 'undefined') {
     mainWindow.setBounds(conf.get('windowBounds'))
   }
 
+  /* ****************************************************************** */
   // open app link (last visited/homepage)
   if (typeof conf.get('lastLink') === 'undefined') {
     mainWindow.loadURL(conf.get('homepage'))
@@ -40,51 +41,62 @@ function createWindow () {
     // mainWindow.loadURL('https://www.onenote.com/notebooks')
   }
 
-  // Emitted when the window is going to be closed
-  mainWindow.on('close', function () {
+  /* ****************************************************************** */
+  // emitted when the window is about to be closed
+  mainWindow.on('close', () => {
     conf.set('windowBounds', mainWindow.getBounds())
     conf.set('lastLink', mainWindow.webContents.getURL())
   })
 
-  // Emitted when the window is closed.
-  mainWindow.on('closed', function () {
-    // delete component
+  // emitted when the window is closed
+  mainWindow.on('closed', () => {
+    // delete main window object
     mainWindow = null
   })
 
-  mainWindow.on('resize', function () {
-    conf.set('windowBounds', mainWindow.getBounds())
+  // emitted when the window is resized
+  mainWindow.on('resize', () => {
+    const newBounds = mainWindow.getBounds()
+    conf.set('windowBounds', newBounds)
   })
 
+  // emitted when page is loaded, webContents are undefined till this
   mainWindow.webContents.on('did-finish-load', () => {
-    // enable/disable menu items once page is loaded
-    // webcontents are undefined before this
+    // placeholder for now, till functions are loaded
     toggleForwardMenuItem()
     toggleBackMenuItem()
   })
 }
 
-// create browser window when app ready
-app.on('ready', function () {
+/* ****************************************************************** */
+// app hooks
+// emitted when ready, create browser window and show webview
+app.on('ready', () => {
   createWindow()
+  if (conf.get('showWelcomePage')) {
+    aboutWindow = showAboutWindow(mainWindow)
+  }
 })
 
-// Quit when all windows are closed.
-app.on('window-all-closed', function () {
-  // handle macOS close and quit functionality
+// emitted when all windows closed, quit app
+app.on('window-all-closed', () => {
+  // handle MacOS close and quit functionality
   if (process.platform !== 'darwin') app.quit()
 })
 
-app.on('activate', function () {
+// emitted when app icon is activated
+app.on('activated', () => {
   // create new window only if none exist
   if (mainWindow === null) createWindow()
 })
 
-// Limit/disable the creation of additional windows
-// mainWindow.webContents.setWindowOpenHandler doesn't yet work on OneNote
+// emitted once web contents are created
 app.on('web-contents-created', (event, contents) => {
+  // emitted when external links are clicked
+  // limit/disable creation of additional windows
   contents.on('new-window', (event, url) => {
     event.preventDefault()
+    console.log(url)
     if (url.startsWith('https://onedrive.live.com')) {
       // open onedrive / onenote links in main window
       mainWindow.loadURL(url)
