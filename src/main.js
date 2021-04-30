@@ -7,7 +7,6 @@ const packageData = require('../package.json')
 
 // app version
 const appVersion = packageData.version
-// console.log(appVersion)
 
 // app defaults
 const appDefaults = {
@@ -50,6 +49,9 @@ function createWindow () {
     // mainWindow.loadURL('https://www.google.com')
     // mainWindow.loadURL('https://www.onenote.com/notebooks')
   }
+
+  /* ****************************************************************** */
+  settingsCheckboxStatus()
 
   /* ****************************************************************** */
   // emitted when the window is about to be closed
@@ -117,35 +119,14 @@ app.on('web-contents-created', (event, contents) => {
   })
 })
 
-/* ******************** Menu Functions *********************** */
-const doAppReset = function () {
-  const fs = require('fs')
-  const getAppPath = path.join(app.getPath('userData'))
-  fs.rmdir(getAppPath, { recursive: true }, err => {
-    if (err) console.log(err)
-    else {
-      console.log('Resetting app')
-      app.relaunch()
-      app.exit()
-    }
-  })
+/* ****************************************************************** */
+// helper functions
+const toggleBooleanConf = function (setting) {
+  const current_conf_value = conf.get(setting)
+  conf.set(setting, !current_conf_value)
+  return !current_conf_value
 }
-
-const showAppResetConfirmation = function () {
-  const options = {
-    type: 'question',
-    buttons: ['Yes', 'No'],
-    defaultId: 1,
-    title: 'App Reset Confirmation',
-    message: 'Are you sure you want to reset the application?'
-  }
-  dialog.showMessageBox(mainWindow, options).then(result => {
-    if (result.response === 0) {
-      doAppReset()
-    }
-  })
-}
-
+// menu item status checks
 const toggleForwardMenuItem = function () {
   const forwardItem = menu.getMenuItemById('go-forward')
   forwardItem.enabled = mainWindow.webContents.canGoForward()
@@ -154,13 +135,26 @@ const toggleBackMenuItem = function () {
   const backItem = menu.getMenuItemById('go-back')
   backItem.enabled = mainWindow.webContents.canGoBack()
 }
-
-const toggleBooleanConf = function (setting) {
-  const current_conf_value = conf.get(setting)
-  conf.set(setting, !current_conf_value)
-  return !current_conf_value
+const settingsCheckboxStatus = function () {
+  menu.getMenuItemById('auto-hide-menubar').checked = conf.get(
+    'autoHideMenuBar'
+  )
+  menu.getMenuItemById('minimize-to-tray').checked = conf.get('minimizeToTray')
+  menu.getMenuItemById('close-to-tray').checked = conf.get('closeToTray')
 }
 
+// navigation menu functions
+const goForward = function () {
+  mainWindow.webContents.goForward()
+}
+const goBack = function () {
+  mainWindow.webContents.goBack()
+}
+const goHome = function () {
+  mainWindow.webContents.loadURL(conf.get('homepage'))
+}
+
+// settings menu functions
 const toggleMenuVisibility = function () {
   const newValue = toggleBooleanConf('autoHideMenuBar')
   mainWindow.setAutoHideMenuBar(newValue)
@@ -173,149 +167,37 @@ const toggleCloseToTray = function () {
   toggleBooleanConf('closeToTray')
 }
 
-/* ******************** Menu Template ************************ */
-const menuTemplate = [
-  {
-    label: 'Navigate',
-    submenu: [
-      {
-        label: 'Forward',
-        id: 'go-forward',
-        click () {
-          mainWindow.webContents.goForward()
-        }
-      },
-      {
-        label: 'Back',
-        id: 'go-back',
-        click () {
-          mainWindow.webContents.goBack()
-        }
-      },
-      {
-        type: 'separator'
-      },
-      {
-        label: 'OneNote Home',
-        click () {
-          mainWindow.webContents.loadURL(conf.get('homepage'))
-        }
-      }
-    ]
-  },
-  {
-    label: 'Edit',
-    submenu: [
-      {
-        role: 'copy'
-      },
-      {
-        role: 'cut'
-      },
-      {
-        role: 'paste'
-      },
-      {
-        type: 'separator'
-      },
-      {
-        role: 'undo'
-      },
-      {
-        role: 'redo'
-      }
-    ]
-  },
-  {
-    label: 'View',
-    submenu: [
-      {
-        role: 'reload'
-      },
-      {
-        type: 'separator'
-      },
-      {
-        role: 'zoomin'
-      },
-      {
-        role: 'zoomout'
-      },
-      {
-        role: 'resetzoom'
-      },
-      {
-        type: 'separator'
-      },
-      {
-        role: 'togglefullscreen'
-      },
-      {
-        role: 'toggledevtools'
-      }
-    ]
-  },
-  {
-    label: 'Settings',
-    submenu: [
-      {
-        label: 'Auto-hide Menu Bar',
-        type: 'checkbox',
-        checked: conf.get('autoHideMenuBar'),
-        click () {
-          toggleMenuVisibility()
-        }
-      },
-      {
-        label: 'Minimize to Tray',
-        type: 'checkbox',
-        checked: conf.get('minimizeToTray'),
-        click () {
-          toggleMinimizeToTray()
-        }
-      },
-      {
-        label: 'Close to Tray',
-        type: 'checkbox',
-        checked: conf.get('closeToTray'),
-        click () {
-          toggleCloseToTray()
-        }
-      }
-    ]
-  },
-  {
-    label: 'Help',
-    submenu: [
-      {
-        label: 'About',
-        click () {
-          aboutWindow = showAboutWindow(mainWindow)
-        }
-      },
-      { type: 'separator' },
-      {
-        label: 'Report Issue/Bug',
-        click () {
-          shell.openExternal(
-            'https://github.com/anujdatar/onenote-desktop/issues/new/choose'
-          )
-        }
-      },
-      {
-        label: 'Reset App',
-        click () {
-          showAppResetConfirmation()
-        }
-      }
-    ]
-  }
-]
+// help menu functions
+const launchAboutWindow = function () {
+  aboutWindow = showAboutWindow(mainWindow)
+}
+const reportBug = function () {
+  shell.openExternal(
+    'https://github.com/anujdatar/onenote-desktop/issues/new/choose'
+  )
+}
+const doAppReset = function () {
+  console.log('doing app reset')
+}
+const showAppResetConfirmation = function () {
+  console.log('message box')
+  doAppReset()
+}
 
-// build application menubar
-const menu = Menu.buildFromTemplate(menuTemplate)
-Menu.setApplicationMenu(menu)
+const menuFunctions = {
+  goForward,
+  goBack,
+  goHome,
+  toggleMenuVisibility,
+  toggleMinimizeToTray,
+  toggleCloseToTray,
+  launchAboutWindow,
+  reportBug,
+  showAppResetConfirmation
+}
+module.exports = menuFunctions
 
+/* ****************************************************************** */
 // update welcome page toggle state from renderer
 ipcMain.on('toggle-welcome-page-state', (event, value) => {
   conf.set('showWelcomePage', value)
@@ -335,3 +217,8 @@ ipcMain.on('get-app-version', (event, message) => {
 ipcMain.on('close-about-page', () => {
   aboutWindow.close()
 })
+
+// build application menubar
+const menuTemplate = require('./menu')
+const menu = Menu.buildFromTemplate(menuTemplate)
+Menu.setApplicationMenu(menu)
