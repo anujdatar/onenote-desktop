@@ -3,6 +3,15 @@
   src: url(Ubuntu-Regular.ttf);
 }
 
+:root {
+  --gh-bg: #0d1117;
+  --gh-inline: #2f333a;
+  --gh-code-bg: #161b22;
+  --gh-link-text: #58a6ff;
+  --gh-text: #c9cbcc;
+  --gh-code-text: #f0f6fc;
+}
+
 body {
   padding-left: 10px;
   padding-right: 10px;
@@ -12,12 +21,6 @@ body {
   line-height: 1.5;
   font-size: 0.9em;
   font-family: 'ubuntu';
-  --gh-bg: #0d1117;
-  --gh-inline: #2f333a;
-  --gh-code-bg: #161b22;
-  --gh-link-text: #58a6ff;
-  --gh-text: #c9cbcc;
-  --gh-code-text: #f0f6fc;
 }
 .header {
   display: flex;
@@ -37,19 +40,22 @@ a {
   text-decoration: none;
   color: var(--gh-link-text);
 }
-button.close {
+button {
   cursor: pointer;
   text-decoration: none;
+  color: var(--gh-text);
+  background-color: var(--gh-inline);
+  border: 0;
+  border-radius: 8px;
+}
+button.close {
   font-family: monospace;
   font-size: 3em;
-  color: var(--gh-text);
   padding: 0px 9px;
-  background-color: var(--gh-inline);
-  border-radius: 8px;
-  border: 0;
 }
-button.close:hover {
+button:hover {
   color: white;
+  background-color: darkorchid;
 }
 
 mark {
