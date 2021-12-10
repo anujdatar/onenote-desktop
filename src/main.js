@@ -2,8 +2,11 @@ const { app, BrowserWindow, Menu, shell, ipcMain, dialog } = require('electron')
 const path = require('path')
 const ConfigStore = require('@anujdatar/appconfig')
 
-const showAboutWindow = require('./about')
 const packageData = require('../package.json')
+
+// custom windows
+const showAboutWindow = require('./about')
+const showMessageBox = require('./messagebox')
 
 // app version
 const appVersion = packageData.version
@@ -26,7 +29,7 @@ let aboutWindow
 
 function createWindow () {
   mainWindow = new BrowserWindow({
-    icon: path.join(__dirname, './images/icon.png'),
+    // icon: path.join(__dirname, './images/icon.png'),
     title: 'OneNote',
     autoHideMenuBar: conf.get('autoHideMenuBar'),
     webPreferences: {
@@ -96,7 +99,7 @@ app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit()
 })
 
-// emitted when app icon is activated
+// emitted when app is activated, icon click in dock or something similar
 app.on('activated', () => {
   // create new window only if none exist
   if (mainWindow === null) createWindow()
@@ -182,6 +185,7 @@ const doAppReset = function () {
 const showAppResetConfirmation = function () {
   console.log('message box')
   doAppReset()
+  showMessageBox(mainWindow, { title: 'aaaaaa' })
 }
 
 const menuFunctions = {
