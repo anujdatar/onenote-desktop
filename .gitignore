@@ -33,6 +33,7 @@ bower_components
 build/Release
 build/
 dist/
+lib/
 release-builds/
 
 # Dependency directories
