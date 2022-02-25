@@ -4,12 +4,12 @@
   "version": "2.0.0-dev",
   "description": "OneNote Desktop Client for Linux",
   "productDescription": "OneNote.com wrapped in electron packaged for Linux",
-  "main": "./src/main.js",
+  "main": "lib/",
   "scripts": {
-    "start": "electron ./src/main.js",
-    "clean-slate": "rimraf dist/ parts/ prime/ stage/ *.snap",
+    "start": "tsc && electron .",
+    "clean-slate": "rimraf lib/ dist/ parts/ prime/ stage/ *.snap",
     "pack": "electron-builder --dir",
-    "build": "npm run clean-slate && electron-builder"
+    "build": "npm run clean-slate && tsc && electron-builder"
   },
   "repository": {
     "type": "git",
@@ -34,11 +34,24 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "@types/node": "^17.0.18",
+    "@typescript-eslint/eslint-plugin": "^5.12.0",
+    "@typescript-eslint/parser": "^5.12.0",
     "electron": "^17.0.1",
     "electron-builder": "^22.14.13",
-    "eslint": "^8.9.0",
+    "eslint": "^7.32.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.2.0",
     "rimraf": "^3.0.2",
     "typescript": "^4.5.5"
+  },
+  "dependencies": {
+    "dot-prop": "^7.2.0",
+    "electron-store": "^8.0.1",
+    "env-paths": "^3.0.0",
+    "pkg-up": "^4.0.0"
   },
   "build": {
     "appId": "org.anuj.${name}",
@@ -76,8 +89,5 @@
     "appImage": {
       "license": "LICENSE.md"
     }
-  },
-  "dependencies": {
-    "electron-store": "^8.0.1"
   }
 }
