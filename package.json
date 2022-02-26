@@ -49,6 +49,7 @@
   },
   "dependencies": {
     "dot-prop": "^7.2.0",
+    "electron-log": "^4.4.6",
     "electron-store": "^8.0.1",
     "env-paths": "^3.0.0",
     "pkg-up": "^4.0.0"
