@@ -231,6 +231,9 @@ const menuTemplate: MenuItemConstructorOptions[] = [
       },
       { type: 'separator' },
       {
+        role: 'reload'
+      },
+      {
         label: 'OneNote Home',
         click () {
           goHome()
