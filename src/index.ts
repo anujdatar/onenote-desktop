@@ -1,11 +1,11 @@
-import { app, BrowserWindow, shell, Menu, MenuItemConstructorOptions } from 'electron'
+import { app, BrowserWindow, shell, Menu, MenuItemConstructorOptions, ipcMain, dialog } from 'electron'
 import ConfigStore from 'electron-store'
-
-// const packageData = require('../package.json')
-// const appVersion = packageData.version
+import * as log from 'electron-log'
+import * as path from 'path'
 
 // global reference for window objects
 let mainWindow: BrowserWindow
+let aboutWindow: BrowserWindow
 
 const appDefaults = {
   homepage: 'https://www.google.com',
@@ -13,6 +13,7 @@ const appDefaults = {
   minimizeToTray: false,
   closeToTray: false,
   showWelcomePage: true,
+  wasMaximized: false,
   width: 800,
   height: 600
 }
@@ -20,8 +21,6 @@ const conf = new ConfigStore({ defaults: appDefaults })
 
 function createWindow () {
   mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
     title: app.name,
     webPreferences: {
       nodeIntegration: false,
@@ -31,10 +30,12 @@ function createWindow () {
 
   /* ****************************************************************** */
   // set window bounds on launch
-  if (typeof conf.get('windowBounds') !== 'undefined') {
+  if (conf.get('wasMaximized')) {
+    mainWindow.maximize()
+  } else if (typeof conf.get('windowBounds') !== 'undefined') {
     mainWindow.setBounds(conf.get('windowBounds'))
   } else {
-    mainWindow.setSize(800, 600)
+    mainWindow.setSize(appDefaults.width, appDefaults.height)
     mainWindow.center()
   }
   // open app link (last visited/homepage)
@@ -48,37 +49,31 @@ function createWindow () {
   settingsCheckboxStatus()
   /* ****************************************************************** */
   // main window lifecycle hooks
-  // emitted when the window is resized
   mainWindow.on('resize', () => {
-    const newBounds = mainWindow.getBounds()
-    conf.set('windowBounds', newBounds)
+    conf.set('windowBounds', mainWindow.getBounds())
   })
   mainWindow.on('moved', () => {
-    const newBounds = mainWindow.getBounds()
-    conf.set('windowBounds', newBounds)
+    conf.set('windowBounds', mainWindow.getBounds())
   })
   mainWindow.on('maximize', () => {
-    const newBounds = mainWindow.getBounds()
-    conf.set('windowBounds', newBounds)
+    conf.set('wasMaximized', true)
   })
   mainWindow.on('unmaximize', () => {
-    const newBounds = mainWindow.getBounds()
-    conf.set('windowBounds', newBounds)
+    conf.set('wasMaximized', false)
+    mainWindow.setBounds(conf.get('windowBounds'))
   })
-  // emitted when page is loaded, webContents are undefined till this
   mainWindow.webContents.on('did-finish-load', () => {
-    // placeholder for now, till functions are loaded
+  // emitted when page is loaded, webContents are undefined till this
     toggleForwardMenuItem()
     toggleBackMenuItem()
   })
-  // emitted when the window is about to be closed
   mainWindow.on('close', () => {
+  // emitted when the window is about to be closed
     conf.set('windowBounds', mainWindow.getBounds())
     conf.set('lastLink', mainWindow.webContents.getURL())
   })
-  // emitted when the window is closed
   // mainWindow.on('closed', () => {
-  //   // delete main window object
+  //   // emitted when the window is closed, delete main window object
   //   mainWindow = null
   // })
 }
@@ -87,13 +82,18 @@ function createWindow () {
 // app hooks
 // emitted when app is ready
 app.whenReady().then(() => {
+  log.info('app starting')
   createWindow()
+  if (conf.get('showWelcomePage')) {
+    launchAboutWindow()
+  }
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
 })
 // emitted when all windows closed, quit app
 app.on('window-all-closed', () => {
+  log.info('app closing')
   // handle MacOS close and quit functionality
   if (process.platform !== 'darwin') app.quit()
 })
@@ -101,7 +101,6 @@ app.on('window-all-closed', () => {
 app.on('web-contents-created', (event, contents) => {
   contents.on('new-window', (event, url) => {
     event.preventDefault()
-    console.log(url)
     if (url.startsWith('https://onedrive.live.com')) {
       mainWindow.loadURL(url)
     } else {
