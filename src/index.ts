@@ -76,6 +76,15 @@ function createWindow () {
   //   // emitted when the window is closed, delete main window object
   //   mainWindow = null
   // })
+  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+    if (url.startsWith('https://onedrive.live.com')) {
+      mainWindow.loadURL(url)
+    } else {
+      log.info('opening', url, 'in external browser')
+      shell.openExternal(url)
+    }
+    return { action: 'deny' }
+  })
 }
 
 /* ******************************************************************** */
@@ -96,17 +105,6 @@ app.on('window-all-closed', () => {
   log.info('app closing')
   // handle MacOS close and quit functionality
   if (process.platform !== 'darwin') app.quit()
-})
-// emitted once web contents are created
-app.on('web-contents-created', (event, contents) => {
-  contents.on('new-window', (event, url) => {
-    event.preventDefault()
-    if (url.startsWith('https://onedrive.live.com')) {
-      mainWindow.loadURL(url)
-    } else {
-      shell.openExternal(url)
-    }
-  })
 })
 /* ******************************************************************** */
 // helper functions
