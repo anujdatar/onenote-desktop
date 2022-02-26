@@ -129,6 +129,11 @@ const settingsCheckboxStatus = function () {
   menu.getMenuItemById('minimize-to-tray')!.checked = conf.get('minimizeToTray')
   menu.getMenuItemById('close-to-tray')!.checked = conf.get('closeToTray')
 }
+const windowReset = function () {
+  mainWindow.loadURL(appDefaults.homepage)
+  mainWindow.setSize(appDefaults.width, appDefaults.height)
+  mainWindow.center()
+}
 // navigation menu functions
 const goForward = function () {
   mainWindow.webContents.goForward()
@@ -153,24 +158,56 @@ const toggleCloseToTray = function () {
 }
 // help menu functions
 const launchAboutWindow = function () {
-  // TODO: make about window and implement about window launch function
-  console.log('opening about window')
+  showAboutWindow(mainWindow)
 }
 const reportBug = function () {
-  // shell.openExternal(
-  //   'https://github.com/anujdatar/onenote-desktop/issues/new/choose'
-  // )
-  console.log('reporting error/bugs')
+  shell.openExternal(
+    'https://github.com/anujdatar/onenote-desktop/issues/new/choose'
+  )
 }
-const doAppReset = function () {
-  // TODO: implement soft and hard reset functions
-  console.log('doing app reset')
+const doSoftReset = function () {
+  const options = {
+    type: 'warning',
+    title: 'App reset confirmation',
+    message: 'Are you sure you want to reset app defaults?',
+    detail: 'This will reset app settings to default, but leave history/login intact.',
+    checkboxLabel: 'Are you sure?',
+    checkboxChecked: false,
+    buttons: ['Cancel', 'Yes'],
+    defaultId: 0,
+    cancelId: 0
+  }
+  dialog.showMessageBox(mainWindow, options)
+    .then(res => {
+      if (res.response === 1 && res.checkboxChecked) {
+        conf.clear()
+        windowReset()
+      }
+    })
 }
-const showAppResetConfirmation = function () {
-  // TODO: show popup message box for app reset confirmation
-  console.log('message box')
-  console.log('confirm app reset here')
-  doAppReset()
+const doHardReset = function () {
+  const options = {
+    type: 'warning',
+    title: 'App reset confirmation',
+    message: 'Are you sure you want to reset everything?',
+    detail: 'This will reset all app settings, and wipe app history, login etc.',
+    checkboxLabel: 'Are you sure?',
+    checkboxChecked: false,
+    buttons: ['Cancel', 'Yes'],
+    defaultId: 0,
+    cancelId: 0
+  }
+  dialog.showMessageBox(mainWindow, options)
+    .then(res => {
+      if (res.response === 1 && res.checkboxChecked) {
+        console.log('hard reset')
+        mainWindow.webContents.session.clearCache()
+        mainWindow.webContents.session.clearAuthCache()
+        mainWindow.webContents.session.clearStorageData()
+        conf.clear()
+        windowReset()
+      }
+    })
 }
 /* ******************************************************************** */
 // app menu
@@ -299,9 +336,15 @@ const menuTemplate: MenuItemConstructorOptions[] = [
         }
       },
       {
-        label: 'Reset App',
+        label: 'Reset App Defaults',
         click () {
-          showAppResetConfirmation()
+          doSoftReset()
+        }
+      },
+      {
+        label: 'Reset App - Everything',
+        click () {
+          doHardReset()
         }
       }
     ]
@@ -310,3 +353,48 @@ const menuTemplate: MenuItemConstructorOptions[] = [
 // build application menubar
 const menu = Menu.buildFromTemplate(menuTemplate)
 Menu.setApplicationMenu(menu)
+
+/* ******************************************************************** */
+function showAboutWindow (parent: BrowserWindow) {
+  aboutWindow = new BrowserWindow({
+    parent: parent,
+    title: 'Welcome to OneNote',
+    modal: true,
+    frame: false,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false
+    }
+  })
+
+  // aboutWindow.loadURL(`file://${__dirname}/../src/pages/about.html`)
+  aboutWindow.loadURL(path.join('file://', __dirname, '/../src/about.html'))
+  aboutWindow.removeMenu()
+
+  aboutWindow.on('closed', () => {
+    aboutWindow.destroy()
+  })
+
+  return aboutWindow
+}
+/* ******************************************************************** */
+// ipc for about window
+// update welcome page toggle state from renderer
+ipcMain.on('toggle-welcome-page-state', (event, value) => {
+  conf.set('showWelcomePage', value)
+})
+
+// send welcome page toggle state on startup
+ipcMain.on('welcome-toggle-state', event => {
+  event.reply('welcome-toggle-state-reply', conf.get('showWelcomePage'))
+})
+
+// send app version to about page
+ipcMain.on('get-app-version', (event, message) => {
+  event.returnValue = app.getVersion()
+})
+
+// close about window
+ipcMain.on('close-about-page', () => {
+  aboutWindow.close()
+})
