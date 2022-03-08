@@ -61,6 +61,16 @@
     <li>
       <strong>App Reset</strong> If you experience problems and would like to
       reset the app, forget settings, history, login, etc.
+      <ul>
+        <li>
+          <strong>Soft Reset</strong> - i.e. reset to app defaults without
+          deleting history/logins.
+        </li>
+        <li>
+          <strong>Hard Reset</strong> - i.e. wipe everything and reset to
+          defaults. you will need to login again.
+        </li>
+      </ul>
     </li>
     <li>
       <strong>Report an Issue</strong>. Just a shortcut to open a new GitHub
@@ -71,34 +81,19 @@
   <h2>Known bugs</h2>
   <ul id="bugs">
     <li>
-      A couple issues with the app reset. App reset is supposed to clear out the
-      app data from the <mark>~/.config</mark> folder, close the app, and
-      restart it.
+      Let me know
     </li>
-    <ul>
-      <li>
-        <strong>AppImage</strong>: App is reset, closes, attempts a restart, but
-        doesn't. Just normally launch the app again and everything should be
-        fine.
-      </li>
-      <li>
-        <strong>Snap</strong>: After app reset electron messageboxes don't
-        display text properly. You just see squares. This is documented issues
-        with Electron, and I am working on a fix. This only seems to affect
-        message boxes spawned by Electron.
-        <br>
-        <p>Resetting the font-config cache fixes this. A temporary fix is to run
-          the following commands in terminal. Generally just the third command
-          should fix it.</p>
-        <p class="code">
-          $ sudo rm /var/cache/fontconfig/* <br>
-          $ rm ~/.cache/fontconfig/* <br>
-          $ fc-cache -r <br>
-        </p>
-      </li>
-    </ul>
   </ul>
 
+  <h2>TO DO:</h2>
+  <ul>
+    <li>
+      Implement 'Minimize to Tray' and 'Close to Tray'.
+    </li>
+    <li>
+      Make about popup center itself inside the main window.
+    </li>
+  </ul>
   <script>
     // handle window close button
     function closeAbout () {

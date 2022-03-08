@@ -6,17 +6,24 @@
 
 ___
 
-This app does not modify or use any direct code from One Note. Just uses [Electron](https://github.com/electron/electron) to open a browser window, and serve it as a desktop application since Linux does not have an official releases of some apps. Uses Electron's BowserView to display third-party webpage/webapp.
+This app does not modify or use any direct code from OneNote. Just uses [Electron](https://github.com/electron/electron) to open a browser window, and serve it as a desktop application since Linux does not have an official releases of some apps. Uses Electron's BowserView to display third-party webpage/webapp.
 
-Started because I prefer using separate apps, and not opening everything in my browser. And, because I hate using Ubuntu's dock, and I'd rather have it open in a window of its own and easily accessible from the dock.
-
+Started because I prefer using separate app windows, and not opening everything in my browser. And, because I hate using Ubuntu's dock.
 ___
+
+## What's new?
+1. **App menu bar** - Auto-hidable menu bar. Use `Alt` to toggle hidden toolbar.
+2. **Forward/Back** - nav buttons in the app menubar.
+3. **Homepage** - Navigate to onenote homepage from menubar. if you're stuck on some other page.
+4. **App Reset**
+  - *Soft Reset* - i.e. reset to app defaults without deleting history/logins.
+  - *Hard Reset* - i.e. wipe everything and reset to defaults. you will need to login again.
 
 ## Installing/Using OneNote desktop
 1. `.deb` and `.AppImage` files can be found on the [releases page](https://github.com/anujdatar/onenote-desktop/releases).
 2. A Snap package can be directly installed from Snap Store `$ snap install onenote-desktop`
 
-**Note**: The AppImage does not have any installation like capabilities. So it does not copy over any icons or `.desktop` shortcuts. You might have to do that yourself. I will try and add the feature at some point. Trying to work on a couple of quality of life/ease of use features at the moment.
+**Note**: The AppImage does not have any installation like capabilities. So it does not copy over any icons or `.desktop` shortcuts. You might have to do that yourself. I will try and add the feature at some point.
 
 ___
 
@@ -26,7 +33,7 @@ ___
 git clone https://github.com/anujdatar/onenote-desktop
 cd onenote-desktop
 npm install
-npm start
+npm run tsc-start
 ```
 
 ___
@@ -34,7 +41,8 @@ ___
 ## Building the app
 
 Run through the entire build process with one command. (Now using electron-builder)
-- Removes stale build files and the `./dist` folder. *So you might want to copy over any old build you want to keep*
+- Removes stale build files and `dist` & `lib` folders. *So you might want to copy over any old build you want to keep*
+- Compiles the typescript files
 - Builds a debian (`.deb`) package, an `AppImage`, and a Snap package (`.snap`) all at once.
 
 ```bash
