@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About OneNote-Desktop</title>
+  <link rel="stylesheet" href="style.css">
+  <base href="./">
+  <script>
+    const { ipcRenderer } = require("electron")
+    const appVersion = ipcRenderer.sendSync('get-app-version', 'getting-app-version')
+    function writeVer () {
+      document.write('v' + appVersion)
+    }
+  </script>
+</head>
+
+<body>
+  <div class="header">
+    <h1>OneNote-Desktop
+      <script>writeVer()</script>
+    </h1>
+    <div>
+      <button class="close" id="xBtn" onclick="closeAbout()">&times;</button>
+    </div>
+  </div>
+
+  <input type="checkbox" name="welcomeToggle" id="welcomeToggle"
+    onclick="welcomeMessageState()">
+  <label for="welcomeToggle" style="cursor:pointer;">Show message at
+    startup</label>
+
+  <p>OneNote desktop app for Linux.</p>
+  <p>This app does not modify or use any direct code from <a
+      href="https://onenote.com/" rel="noreferrer noopener"
+      target="_blank">OneNote</a>. Just uses <a
+      href="https://github.com/electron/electron" rel="noreferrer noopener"
+      target="_blank">Electron</a> to open a browser window, and serve it as a
+    desktop application.</p>
+
+  <hr>
+
+  <h2>What's new in version
+    <script>writeVer()</script>?
+  </h2>
+  <ol>
+    <li>
+      A new app <strong>MenuBar</strong> at the top. The menu is auto-hidable,
+      press <mark>Alt</mark> to show/hide the menubar.
+    </li>
+    <li>
+      <strong>Forward/Back</strong> navigation buttons for the app are in the
+      menu.
+    </li>
+    <li>
+      Navigate to <strong>OneNote Homepage</strong> i.e. list of all your
+      notebooks.
+    </li>
+    <li>
+      <strong>App Reset</strong> If you experience problems and would like to
+      reset the app, forget settings, history, login, etc.
+      <ul>
+        <li>
+          <strong>Soft Reset</strong> - i.e. reset to app defaults without
+          deleting history/logins.
+        </li>
+        <li>
+          <strong>Hard Reset</strong> - i.e. wipe everything and reset to
+          defaults. you will need to login again.
+        </li>
+      </ul>
+    </li>
+    <li>
+      <strong>Report an Issue</strong>. Just a shortcut to open a new GitHub
+      issue. Link is opened in you default system browser.
+    </li>
+  </ol>
+
+  <h2>Known bugs</h2>
+  <ul id="bugs">
+    <li>
+      Let me know
+    </li>
+  </ul>
+
+  <h2>TO DO:</h2>
+  <ol>
+    <li>
+      Implement 'Minimize to Tray' and 'Close to Tray'. Only have
+      placeholders at the moment, they don't do anything. It's not an error.
+    </li>
+    <li>
+      Make about popup center itself inside the main window.
+    </li>
+    <li>
+      Dark Mode maybe?
+    </li>
+  </ol>
+  <script>
+    // handle window close button
+    function closeAbout () {
+      ipcRenderer.send('close-about-page', 'closing-about-page')
+    }
+
+    // handle welcome message state checkbox on startup
+    ipcRenderer.send('welcome-toggle-state', 'getting-welcome-page-toggle-state')
+    ipcRenderer.on('welcome-toggle-state-reply', (event, value) => {
+      document.getElementById('welcomeToggle').checked = value
+    })
+    // toggle welcome message state checkbox
+    function welcomeMessageState () {
+      ipcRenderer.send('toggle-welcome-page-state', document.getElementById('welcomeToggle').checked)
+    }
+  </script>
+
+</body>
+
+</html>
