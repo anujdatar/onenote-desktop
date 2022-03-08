@@ -3,7 +3,7 @@ import ConfigStore from 'electron-store'
 import * as log from 'electron-log'
 import * as path from 'path'
 // TODO: Implement tray item, tray context menu, open from tray, etc
-// TODO: Add app icons
+
 // global reference for window objects
 let mainWindow: BrowserWindow
 let aboutWindow: BrowserWindow
