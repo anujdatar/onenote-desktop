@@ -22,6 +22,7 @@ const conf = new ConfigStore({ defaults: appDefaults })
 
 function createWindow () {
   mainWindow = new BrowserWindow({
+    icon: path.join(__dirname, '../assets/icon.png'),
     title: app.name,
     webPreferences: {
       nodeIntegration: false,
