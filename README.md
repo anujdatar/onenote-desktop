@@ -19,6 +19,7 @@ ___
   - *Soft Reset* - i.e. reset to app defaults without deleting history/logins.
   - *Hard Reset* - i.e. wipe everything and reset to defaults. you will need to login again.
 
+___
 ## Installing/Using OneNote desktop
 1. `.deb` and `.AppImage` files can be found on the [releases page](https://github.com/anujdatar/onenote-desktop/releases).
 2. A Snap package can be directly installed from Snap Store `$ snap install onenote-desktop`
@@ -51,6 +52,12 @@ npm run build
 
 ___
 
+## TODO
+1. Implement 'Minimize to Tray' and 'Close to Tray'. Only have placeholders at the moment, they don't do anything. It's not an error.
+2. Make about popup center itself inside the main window.
+3. Dark Mode maybe?
+
+___
 ## Author
 
 * Anuj Datar - [GitHub](https://github.com/anujdatar/)
