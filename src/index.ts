@@ -2,13 +2,14 @@ import { app, BrowserWindow, shell, Menu, MenuItemConstructorOptions, ipcMain, d
 import ConfigStore from 'electron-store'
 import * as log from 'electron-log'
 import * as path from 'path'
-
+// TODO: Implement tray item, tray context menu, open from tray, etc
+// TODO: Add app icons
 // global reference for window objects
 let mainWindow: BrowserWindow
 let aboutWindow: BrowserWindow
 
 const appDefaults = {
-  homepage: 'https://www.google.com',
+  homepage: 'https://www.onenote.com/notebooks',
   autoHideMenuBar: false,
   minimizeToTray: false,
   closeToTray: false,
@@ -152,9 +153,11 @@ const toggleMenuVisibility = function () {
 }
 const toggleMinimizeToTray = function () {
   toggleBooleanConf('minimizeToTray')
+  // TODO: implement this
 }
 const toggleCloseToTray = function () {
   toggleBooleanConf('closeToTray')
+  // TODO: implement this
 }
 // help menu functions
 const launchAboutWindow = function () {
@@ -200,7 +203,6 @@ const doHardReset = function () {
   dialog.showMessageBox(mainWindow, options)
     .then(res => {
       if (res.response === 1 && res.checkboxChecked) {
-        console.log('hard reset')
         mainWindow.webContents.session.clearCache()
         mainWindow.webContents.session.clearAuthCache()
         mainWindow.webContents.session.clearStorageData()
