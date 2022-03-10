@@ -85,3 +85,19 @@ ul {
 strong {
   color: purple;
 }
+
+.tooltip {
+  visibility: hidden;
+  font-family: monospace;
+  background-color: var(--gh-inline);
+  color: var(--gh-inline-text);
+  padding: 2px 5px;
+  border-radius: 5px;
+
+  position: absolute;
+  z-index: 1;
+}
+
+a:hover .tooltip {
+  visibility: visible;
+}

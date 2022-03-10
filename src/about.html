@@ -33,12 +33,23 @@
     startup</label>
 
   <p>OneNote desktop app for Linux.</p>
-  <p>This app does not modify or use any direct code from <a
-      href="https://onenote.com/" rel="noreferrer noopener"
-      target="_blank">OneNote</a>. Just uses <a
-      href="https://github.com/electron/electron" rel="noreferrer noopener"
-      target="_blank">Electron</a> to open a browser window, and serve it as a
-    desktop application.</p>
+  <p>For source code and more information please visit the
+    <a href="https://github.com/anujdatar/onenote-desktop">
+      GitHub<span
+        class="tooltip">https://github.com/anujdatar/onenote-desktop</span>
+    </a> repo.
+  </p>
+  <p>This app does not modify or use any direct code from
+    <a href="https://onenote.com/" rel="noreferrer noopener" target="_blank">
+      OneNote<span class="tooltip">https://onenote.com</span>
+    </a>. Just uses
+    <a href="https://github.com/electron/electron" rel="noreferrer noopener"
+      target="_blank">
+      Electron
+      <span class="tooltip">https://github.com/electron/electron</span>
+    </a> to open a browser window, and serve it as a
+    desktop application.
+  </p>
 
   <hr>
 
@@ -59,16 +70,19 @@
       notebooks.
     </li>
     <li>
-      <strong>App Reset</strong> If you experience problems and would like to
-      reset the app, forget settings, history, login, etc.
+      <strong>App Reset</strong> New menu options under <mark>Help</mark> to
+      reset app to defaults in case you run into errors, or bugs. These options
+      do not make any changes to *Microsoft OneNote* settings or data. They only
+      reset the local wrapper app's settings or history.
       <ul>
         <li>
           <strong>Soft Reset</strong> - i.e. reset to app defaults without
-          deleting history/logins.
+          deleting history/logins. <mark>Reset app defaults</mark>
         </li>
         <li>
           <strong>Hard Reset</strong> - i.e. wipe everything and reset to
-          defaults. you will need to login again.
+          defaults. you will need to login again. <mark>Reset app -
+            Everything</mark>
         </li>
       </ul>
     </li>
@@ -78,13 +92,86 @@
     </li>
   </ol>
 
+  <hr>
+
+  <h2>FAQ</h2>
+  <strong>Q</strong>: What if I am stuck on some other page, and cannot return
+  to my notebooks?
+  <br>
+  <strong>A</strong>: Go to app menubar <mark>Navigate</mark> \>
+  <mark>Forward</mark> or <mark>Backward</mark> or <mark>OneNote Home</mark>
+  <br><br>
+
+  <strong>Q</strong>: I can't see the app menubar at the top. What do I do?
+  <br>
+  <strong>A</strong>: Press <mark>Alt</mark> to show/hide menubar. If you wish
+  to make menu visible at all times, toggle the <mark>Auto-hide MenuBar</mark>
+  option in the <mark>Settings</mark> menu option.
+  <br><br>
+
+  <strong>Q</strong>: The app is behaving in an unexpected manner. What do I do?
+  <br>
+  <strong>A</strong>: Try to reset the local app settings from the
+  <mark>Help</mark> menu. Should just help to reset any corrupted configs, or
+  local cache. If this does not work, try to delete the config folders manually
+  (steps given below). If this too does not help, please open a new issue on
+  <a href="https://github.com/anujdatar/onenote-desktop/issues/new/choose">
+    GitHub
+    <span class="tooltip">
+      https://github.com/anujdatar/onenote-desktop/issues/new/choose
+    </span>
+  </a>.
+
+  <hr>
+  <h2>Manually resetting the app</h2>
+  <p>Clearing the local settings only</p>
+  <p>If you installed the app using the <mark>.deb</mark> package, or are using
+    the <mark>AppImage</mark>:
+  </p>
+  <ol>
+    <li>Close the app.</li>
+    <li>Go to <mark>/home/\<user\>/.config/onenote-desktop</mark> or
+      <mark>/home/\<user\>/.config/OneNote</mark>.
+    </li>
+    <li>Delete the <mark>config.json</mark> file.</li>
+    <li>Restart the app.</li>
+  </ol>
+
+  OR
+
+  <p>If you are using <mark>.snap</mark>, i.e. you used <mark>sudo snap install
+      onenote-desktop</mark> or used the Ubuntu App Store to install the app:
+  </p>
+  <ol>
+    <li>Close the app.</li>
+    <li>Go to <mark>`/home/\<user\>
+          /snap/onenote-desktop/current/.config/OneNote/</mark>.</li>
+    <li>Delete the <mark>config.json</mark> file.</li>
+    <li>Restart the app.</li>
+  </ol>
+
+  <p> For clearing local history, cache and login session:</p>
+  <ol>
+    <li>Close the app</li>
+    <li>Delete the entire folder mentioned in **Step 2** above.</li>
+    <li>Restart the app.</li>
+  </ol>
+
+  <hr>
   <h2>Known bugs</h2>
   <ul id="bugs">
     <li>
-      Let me know
+      Let me know.
+      <a href="https://github.com/anujdatar/onenote-desktop/issues/new/choose">
+        GitHub Issues
+        <span class="tooltip">
+          https://github.com/anujdatar/onenote-desktop/issues/new/choose
+        </span>
+      </a>
     </li>
   </ul>
 
+  <hr>
   <h2>TO DO:</h2>
   <ol>
     <li>
