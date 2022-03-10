@@ -45,8 +45,6 @@ function createWindow () {
     mainWindow.loadURL(conf.get('homepage'))
   } else {
     mainWindow.loadURL(conf.get('lastLink'))
-    // mainWindow.loadURL('https://www.google.com')
-    // mainWindow.loadURL('https://www.onenote.com/notebooks')
   }
   settingsCheckboxStatus()
   /* ****************************************************************** */
@@ -74,10 +72,6 @@ function createWindow () {
     conf.set('windowBounds', mainWindow.getBounds())
     conf.set('lastLink', mainWindow.webContents.getURL())
   })
-  // mainWindow.on('closed', () => {
-  //   // emitted when the window is closed, delete main window object
-  //   mainWindow = null
-  // })
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
     if (url.startsWith('https://onedrive.live.com')) {
       mainWindow.loadURL(url)
@@ -373,7 +367,6 @@ function showAboutWindow (parent: BrowserWindow) {
     }
   })
 
-  // aboutWindow.loadURL(`file://${__dirname}/../src/pages/about.html`)
   aboutWindow.loadURL(path.join('file://', __dirname, '/../src/about.html'))
   aboutWindow.removeMenu()
 
