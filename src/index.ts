@@ -73,12 +73,15 @@ function createWindow () {
     conf.set('lastLink', mainWindow.webContents.getURL())
   })
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+    log.info('Requesting url', url)
     if (url.startsWith('https://onedrive.live.com') ||
-      url.startsWith('https://d.docs.live.net')
+      url.startsWith('https://d.docs.live.net') ||
+      url.startsWith('https://www.onenote.com')
     ) {
+      log.info('Opening', url, 'inside the OneNote app browser window')
       mainWindow.loadURL(url)
     } else {
-      log.info('opening', url, 'in external browser')
+      log.info('Opening', url, 'in external browser')
       shell.openExternal(url)
     }
     return { action: 'deny' }
