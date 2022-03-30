@@ -73,7 +73,9 @@ function createWindow () {
     conf.set('lastLink', mainWindow.webContents.getURL())
   })
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
-    if (url.startsWith('https://onedrive.live.com')) {
+    if (url.startsWith('https://onedrive.live.com') ||
+      url.startsWith('https://d.docs.live.net')
+    ) {
       mainWindow.loadURL(url)
     } else {
       log.info('opening', url, 'in external browser')
