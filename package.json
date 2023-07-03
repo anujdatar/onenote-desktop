@@ -7,10 +7,10 @@
   "main": "lib/",
   "scripts": {
     "start": "electron .",
-    "tsc-start": "tsc && electron .",
-    "clean-slate": "rimraf lib/ dist/ parts/ prime/ stage/ *.snap",
+    "dev": "tsc && electron .",
+    "clean": "rimraf lib/ dist/ parts/ prime/ stage/ *.snap",
     "pack": "electron-builder --dir",
-    "build": "npm run clean-slate && tsc && electron-builder"
+    "build": "npm run clean && tsc && electron-builder"
   },
   "repository": {
     "type": "git",
