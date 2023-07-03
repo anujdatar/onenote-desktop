@@ -48,9 +48,7 @@
     "typescript": "^5.1.6"
   },
   "dependencies": {
-    "dot-prop": "^7.2.0",
-    "env-paths": "^3.0.0",
-    "pkg-up": "^4.0.0"
+    "dot-prop": "^8.0.1",
     "electron-log": "^4.4.8",
     "electron-store": "^8.1.0"
   },
