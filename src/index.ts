@@ -2,23 +2,15 @@ import { app, BrowserWindow, shell, Menu, MenuItemConstructorOptions, ipcMain, d
 import ConfigStore from 'electron-store'
 import * as log from 'electron-log'
 import * as path from 'path'
+import { conf } from './appConfig'
 // TODO: Implement tray item, tray context menu, open from tray, etc
 
 // global reference for window objects
 let mainWindow: BrowserWindow
 let aboutWindow: BrowserWindow
 
-const appDefaults = {
-  homepage: 'https://www.onenote.com/notebooks',
-  autoHideMenuBar: false,
-  minimizeToTray: false,
-  closeToTray: false,
-  showWelcomePage: true,
-  wasMaximized: false,
-  width: 800,
-  height: 600
-}
-const conf = new ConfigStore({ defaults: appDefaults })
+const currentVersion = app.getVersion()
+conf.set('currentVersion', currentVersion)
 
 function createWindow () {
   mainWindow = new BrowserWindow({
