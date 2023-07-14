@@ -27,9 +27,9 @@
     </div>
   </div>
 
-  <input type="checkbox" name="welcomeToggle" id="welcomeToggle"
-    onclick="welcomeMessageState()">
-  <label for="welcomeToggle" style="cursor:pointer;">Show message at
+  <input type="checkbox" name="aboutToggle" id="aboutToggle"
+    onclick="aboutWindowState()">
+  <label for="aboutToggle" style="cursor:pointer;">Show this message at
     startup</label>
 
   <p>OneNote desktop app for Linux.</p>
@@ -186,19 +186,19 @@
     </li>
   </ol>
   <script>
-    // handle window close button
+    // handle about window close button
     function closeAbout () {
-      ipcRenderer.send('close-about-page', 'closing-about-page')
+      ipcRenderer.send('close-about-window', 'closing-about-window')
     }
 
-    // handle welcome message state checkbox on startup
-    ipcRenderer.send('welcome-toggle-state', 'getting-welcome-page-toggle-state')
-    ipcRenderer.on('welcome-toggle-state-reply', (event, value) => {
-      document.getElementById('welcomeToggle').checked = value
+    // handle about window state checkbox on startup
+    ipcRenderer.send('get-about-toggle-state')
+    ipcRenderer.on('about-toggle-state-reply', (event, value) => {
+      document.getElementById('aboutToggle').checked = value
     })
-    // toggle welcome message state checkbox
-    function welcomeMessageState () {
-      ipcRenderer.send('toggle-welcome-page-state', document.getElementById('welcomeToggle').checked)
+    // toggle about window state checkbox
+    function aboutWindowState () {
+      ipcRenderer.send('change-about-window-state', document.getElementById('aboutToggle').checked)
     }
   </script>
 
