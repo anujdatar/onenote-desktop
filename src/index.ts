@@ -3,6 +3,7 @@ import ConfigStore from 'electron-store'
 import * as log from 'electron-log'
 import * as path from 'path'
 import { conf } from './appConfig'
+import { createTrayItem } from './trayItem'
 // TODO: Implement tray item, tray context menu, open from tray, etc
 
 // global reference for window objects
@@ -353,7 +354,7 @@ Menu.setApplicationMenu(menu)
 
 /* ******************************************************************** */
 function showAboutWindow (parent: BrowserWindow) {
-  aboutWindow = new BrowserWindow({
+    createTrayItem(mainWindow)
     parent: parent,
     title: 'Welcome to OneNote',
     modal: true,
