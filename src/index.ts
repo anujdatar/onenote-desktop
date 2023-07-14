@@ -1,19 +1,27 @@
-import { app, BrowserWindow, shell, Menu, MenuItemConstructorOptions, ipcMain, dialog } from 'electron'
-import ConfigStore from 'electron-store'
+import {
+  app,
+  BrowserWindow,
+  dialog,
+  globalShortcut,
+  Menu,
+  type MenuItem,
+  shell
+} from 'electron'
 import * as log from 'electron-log'
 import * as path from 'path'
+import { appMenuTemplate, setMenuBarVisibility } from './menu'
 import { conf } from './appConfig'
+import { createAboutWindow } from './aboutWindow'
 import { createTrayItem } from './trayItem'
 // TODO: Implement tray item, tray context menu, open from tray, etc
 
-// global reference for window objects
+// global reference for main window object
 let mainWindow: BrowserWindow
-let aboutWindow: BrowserWindow
 
 const currentVersion = app.getVersion()
 conf.set('currentVersion', currentVersion)
 
-function createWindow () {
+const createAppMainWindow = (): void => {
   mainWindow = new BrowserWindow({
     icon: path.join(__dirname, '../assets/icon.png'),
     title: app.name,
@@ -30,18 +38,18 @@ function createWindow () {
   } else if (typeof conf.get('windowBounds') !== 'undefined') {
     mainWindow.setBounds(conf.get('windowBounds'))
   } else {
-    mainWindow.setSize(appDefaults.width, appDefaults.height)
+    mainWindow.setSize(conf.get('width'), conf.get('height'))
     mainWindow.center()
   }
   // open app link (last visited/homepage)
   if (typeof conf.get('lastLink') === 'undefined') {
-    mainWindow.loadURL(conf.get('homepage'))
+    void mainWindow.loadURL(conf.get('homepage'))
   } else {
-    mainWindow.loadURL(conf.get('lastLink'))
+    void mainWindow.loadURL(conf.get('lastLink'))
   }
-  settingsCheckboxStatus()
   /* ****************************************************************** */
   // main window lifecycle hooks
+  // window size and location
   mainWindow.on('resize', () => {
     conf.set('windowBounds', mainWindow.getBounds())
   })
@@ -53,18 +61,35 @@ function createWindow () {
   })
   mainWindow.on('unmaximize', () => {
     conf.set('wasMaximized', false)
-    mainWindow.setBounds(conf.get('windowBounds'))
   })
-  mainWindow.webContents.on('did-finish-load', () => {
-  // emitted when page is loaded, webContents are undefined till this
-    toggleForwardMenuItem()
-    toggleBackMenuItem()
-  })
-  mainWindow.on('close', () => {
+
+  // emitted when window is minimized
+  // mainWindow.on('minimize', (event: Event) => {
+  // if (conf.get('minimizeToTray')) {
+  // event.preventDefault()
+  // mainWindow.hide()
+  // }
+  // })
+  // mainWindow.on('restore', () => {
+  //   mainWindow.show()
+  // })
+
   // emitted when the window is about to be closed
+  mainWindow.on('close', () => {
     conf.set('windowBounds', mainWindow.getBounds())
     conf.set('lastLink', mainWindow.webContents.getURL())
+    conf.set('lastVersion', currentVersion)
   })
+
+  // enable/disable nav menu items (forward/back)
+  mainWindow.webContents.on('did-finish-load', () => {
+    const backItem = Menu.getApplicationMenu()?.getMenuItemById('back') as MenuItem
+    backItem.enabled = mainWindow.webContents.canGoBack()
+
+    const forwardItem = Menu.getApplicationMenu()?.getMenuItemById('forward') as MenuItem
+    forwardItem.enabled = mainWindow.webContents.canGoForward()
+  })
+  // handle external links in the main window
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
     log.info('Requesting url', url)
     if (url.startsWith('https://onedrive.live.com') ||
@@ -72,326 +97,77 @@ function createWindow () {
       url.startsWith('https://www.onenote.com')
     ) {
       log.info('Opening', url, 'inside the OneNote app browser window')
-      mainWindow.loadURL(url)
+      void mainWindow.loadURL(url)
     } else {
       log.info('Opening', url, 'in external browser')
-      shell.openExternal(url)
+      void shell.openExternal(url)
     }
     return { action: 'deny' }
   })
 }
 
 /* ******************************************************************** */
-// app hooks
+// disable GPU acceleration if disabled in config, default is off
+if (!conf.get('enableGPUAcceleration')) {
+  app.commandLine.appendSwitch('ignore-gpu-blacklist')
+  app.commandLine.appendSwitch('disable-gpu')
+  app.commandLine.appendSwitch('disable-gpu-compositing')
+}
+// app lifecycle hooks
 // emitted when app is ready
-app.whenReady().then(() => {
-  log.info('app starting')
-  createWindow()
-  if (conf.get('showWelcomePage')) {
-    launchAboutWindow()
-  }
-  app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) createWindow()
-  })
-})
-// emitted when all windows closed, quit app
-app.on('window-all-closed', () => {
-  log.info('app closing')
-  // handle MacOS close and quit functionality
-  if (process.platform !== 'darwin') app.quit()
-})
-/* ******************************************************************** */
-// helper functions
-const toggleBooleanConf = function (setting: string) {
-  const currentConfValue = conf.get(setting)
-  conf.set(setting, !currentConfValue)
-  return !currentConfValue
-}
-// menu item status checks
-const toggleForwardMenuItem = function () {
-  const forwardItem = menu.getMenuItemById('go-forward')!
-  forwardItem.enabled = mainWindow.webContents.canGoForward()
-}
-const toggleBackMenuItem = function () {
-  const backItem = menu.getMenuItemById('go-back')!
-  backItem.enabled = mainWindow.webContents.canGoBack()
-}
-const settingsCheckboxStatus = function () {
-  menu.getMenuItemById('auto-hide-menubar')!.checked = conf.get(
-    'autoHideMenuBar'
-  )
-  menu.getMenuItemById('minimize-to-tray')!.checked = conf.get('minimizeToTray')
-  menu.getMenuItemById('close-to-tray')!.checked = conf.get('closeToTray')
-}
-const windowReset = function () {
-  mainWindow.loadURL(appDefaults.homepage)
-  mainWindow.setSize(appDefaults.width, appDefaults.height)
-  mainWindow.center()
-}
-// navigation menu functions
-const goForward = function () {
-  mainWindow.webContents.goForward()
-}
-const goBack = function () {
-  mainWindow.webContents.goBack()
-}
-const goHome = function () {
-  mainWindow.webContents.loadURL(conf.get('homepage'))
-}
-// settings menu functions
-const toggleMenuVisibility = function () {
-  const newValue = toggleBooleanConf('autoHideMenuBar')
-  mainWindow.setAutoHideMenuBar(newValue)
-  mainWindow.setMenuBarVisibility(!newValue)
-}
-const toggleMinimizeToTray = function () {
-  toggleBooleanConf('minimizeToTray')
-  // TODO: implement this
-}
-const toggleCloseToTray = function () {
-  toggleBooleanConf('closeToTray')
-  // TODO: implement this
-}
-// help menu functions
-const launchAboutWindow = function () {
-  showAboutWindow(mainWindow)
-}
-const reportBug = function () {
-  shell.openExternal(
-    'https://github.com/anujdatar/onenote-desktop/issues/new/choose'
-  )
-}
-const doSoftReset = function () {
-  const options = {
-    type: 'warning',
-    title: 'App reset confirmation',
-    message: 'Are you sure you want to reset app defaults?',
-    detail: 'This will reset app settings to default, but leave history/login intact.',
-    checkboxLabel: 'Are you sure?',
-    checkboxChecked: false,
-    buttons: ['Cancel', 'Yes'],
-    defaultId: 0,
-    cancelId: 0
-  }
-  dialog.showMessageBox(mainWindow, options)
-    .then(res => {
-      if (res.response === 1 && res.checkboxChecked) {
-        conf.clear()
-        windowReset()
-      }
-    })
-}
-const doHardReset = function () {
-  const options = {
-    type: 'warning',
-    title: 'App reset confirmation',
-    message: 'Are you sure you want to reset everything?',
-    detail: 'This will reset all app settings, and wipe app history, login etc.',
-    checkboxLabel: 'Are you sure?',
-    checkboxChecked: false,
-    buttons: ['Cancel', 'Yes'],
-    defaultId: 0,
-    cancelId: 0
-  }
-  dialog.showMessageBox(mainWindow, options)
-    .then(res => {
-      if (res.response === 1 && res.checkboxChecked) {
-        mainWindow.webContents.session.clearCache()
-        mainWindow.webContents.session.clearAuthCache()
-        mainWindow.webContents.session.clearStorageData()
-        conf.clear()
-        windowReset()
-      }
-    })
-}
-/* ******************************************************************** */
-// app menu
-const menuTemplate: MenuItemConstructorOptions[] = [
-  {
-    label: 'Navigate',
-    submenu: [
-      {
-        label: 'Forward',
-        id: 'go-forward',
-        click () {
-          goForward()
-        }
-      },
-      {
-        label: 'Back',
-        id: 'go-back',
-        click () {
-          goBack()
-        }
-      },
-      { type: 'separator' },
-      {
-        role: 'reload'
-      },
-      {
-        label: 'OneNote Home',
-        click () {
-          goHome()
-        }
-      }
-    ]
-  },
-  {
-    label: 'Edit',
-    submenu: [
-      {
-        role: 'copy'
-      },
-      {
-        role: 'cut'
-      },
-      {
-        role: 'paste'
-      },
-      {
-        type: 'separator'
-      },
-      {
-        role: 'undo'
-      },
-      {
-        role: 'redo'
-      }
-    ]
-  },
-  {
-    label: 'View',
-    submenu: [
-      {
-        role: 'reload'
-      },
-      {
-        type: 'separator'
-      },
-      {
-        role: 'zoomIn'
-      },
-      {
-        role: 'zoomOut'
-      },
-      {
-        role: 'resetZoom'
-      },
-      {
-        type: 'separator'
-      },
-      {
-        role: 'togglefullscreen'
-      },
-      {
-        role: 'toggleDevTools'
-      }
-    ]
-  },
-  {
-    label: 'Settings',
-    submenu: [
-      {
-        label: 'Auto-hide MenuBar',
-        type: 'checkbox',
-        id: 'auto-hide-menubar',
-        click () {
-          toggleMenuVisibility()
-        }
-      },
-      {
-        label: 'Minimize to tray',
-        type: 'checkbox',
-        id: 'minimize-to-tray',
-        click () {
-          toggleMinimizeToTray()
-        }
-      },
-      {
-        label: 'Close to tray',
-        type: 'checkbox',
-        id: 'close-to-tray',
-        click () {
-          toggleCloseToTray()
-        }
-      }
-    ]
-  },
-  {
-    label: 'Help',
-    submenu: [
-      {
-        label: 'About',
-        click () {
-          launchAboutWindow()
-        }
-      },
-      { type: 'separator' },
-      {
-        label: 'Report Issue/Bug',
-        click () {
-          reportBug()
-        }
-      },
-      {
-        label: 'Reset App Defaults',
-        click () {
-          doSoftReset()
-        }
-      },
-      {
-        label: 'Reset App - Everything',
-        click () {
-          doHardReset()
-        }
-      }
-    ]
-  }
-]
-// build application menubar
-const menu = Menu.buildFromTemplate(menuTemplate)
-Menu.setApplicationMenu(menu)
+app.whenReady()
+  .then(() => {
+    log.info('app starting')
 
-/* ******************************************************************** */
-function showAboutWindow (parent: BrowserWindow) {
+    createAppMainWindow()
+    // create tray item
     createTrayItem(mainWindow)
-    parent: parent,
-    title: 'Welcome to OneNote',
-    modal: true,
-    frame: false,
-    webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false
+
+    if (conf.get('autoShowAboutWindow') || conf.get('lastVersion') !== currentVersion) {
+      createAboutWindow(mainWindow) // show about window on first run or version change
     }
+    app.on('activate', () => {
+      if (BrowserWindow.getAllWindows().length === 0) {
+        createAppMainWindow()
+      } else {
+        mainWindow.show()
+      }
+    })
+
+    /* ******************************************************************** */
+    // create menu
+    const menuTemplate = appMenuTemplate(conf)
+    const menu = Menu.buildFromTemplate(menuTemplate)
+    Menu.setApplicationMenu(menu)
+
+    // modify menu bar
+    setMenuBarVisibility(mainWindow, !conf.get('autoHideMenuBar'))
+    // register global shortcuts
+    globalShortcut.register('F1', () => {
+      createAboutWindow(mainWindow) // show about window on F1 keypress
+    })
+    // set menu checkbox values
+    setMenuCheckbox(menu, 'autoHideMenuBar')
+    setMenuCheckbox(menu, 'minimizeToTray')
+    setMenuCheckbox(menu, 'closeToTray')
+    setMenuCheckbox(menu, 'enableGPUAcceleration')
+  })
+  .catch((err) => {
+    log.error(err)
+    dialog.showErrorBox('Error', err.message)
+    app.quit()
   })
 
-  aboutWindow.loadURL(path.join('file://', __dirname, '/../src/about.html'))
-  aboutWindow.removeMenu()
-
-  aboutWindow.on('closed', () => {
-    aboutWindow.destroy()
-  })
-
-  return aboutWindow
-}
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin' && !conf.get('closeToTray')) {
+    log.info('app closing')
+    app.quit()
+  }
+})
 /* ******************************************************************** */
-// ipc for about window
-// update welcome page toggle state from renderer
-ipcMain.on('toggle-welcome-page-state', (event, value) => {
-  conf.set('showWelcomePage', value)
-})
-
-// send welcome page toggle state on startup
-ipcMain.on('welcome-toggle-state', event => {
-  event.reply('welcome-toggle-state-reply', conf.get('showWelcomePage'))
-})
-
-// send app version to about page
-ipcMain.on('get-app-version', (event, message) => {
-  event.returnValue = app.getVersion()
-})
-
-// close about window
-ipcMain.on('close-about-page', () => {
-  aboutWindow.close()
-})
+// menu checkbox functions
+// app menu generic helper functions
+const setMenuCheckbox = (menu: Menu, menuItemId: string): void => {
+  const menuItem = menu.getMenuItemById(menuItemId) as MenuItem
+  menuItem.checked = conf.get(menuItemId)
+}
