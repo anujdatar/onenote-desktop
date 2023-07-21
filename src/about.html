@@ -9,26 +9,23 @@
   <link rel="stylesheet" href="style.css">
   <base href="./">
   <script>
-    const { ipcRenderer } = require("electron")
-    const appVersion = ipcRenderer.sendSync('get-app-version', 'getting-app-version')
-    function writeVer () {
-      document.write('v' + appVersion)
-    }
+    window.electron.setAboutWindowState()
   </script>
 </head>
 
 <body>
   <div class="header">
     <h1>OneNote-Desktop
-      <script>writeVer()</script>
+      <script>window.electron.writeVer()</script>
     </h1>
     <div>
-      <button class="close" id="xBtn" onclick="closeAbout()">&times;</button>
+      <button class="close" id="xBtn"
+        onclick="window.electron.closeAbout()">&times;</button>
     </div>
   </div>
 
   <input type="checkbox" name="aboutToggle" id="aboutToggle"
-    onclick="aboutWindowState()">
+    onclick="window.electron.toggleAboutWindowState()">
   <label for="aboutToggle" style="cursor:pointer;">Show this message at
     startup</label>
 
@@ -54,7 +51,7 @@
   <hr>
 
   <h2>What's new in version
-    <script>writeVer()</script>?
+    <script>window.electron.writeVer()</script>?
   </h2>
   <ol>
     <li>
@@ -185,22 +182,6 @@
       Dark Mode maybe?
     </li>
   </ol>
-  <script>
-    // handle about window close button
-    function closeAbout () {
-      ipcRenderer.send('close-about-window', 'closing-about-window')
-    }
-
-    // handle about window state checkbox on startup
-    ipcRenderer.send('get-about-toggle-state')
-    ipcRenderer.on('about-toggle-state-reply', (event, value) => {
-      document.getElementById('aboutToggle').checked = value
-    })
-    // toggle about window state checkbox
-    function aboutWindowState () {
-      ipcRenderer.send('change-about-window-state', document.getElementById('aboutToggle').checked)
-    }
-  </script>
 
 </body>
 
