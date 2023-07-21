@@ -1,4 +1,4 @@
-import { BrowserWindow, ipcMain } from 'electron'
+import path from 'path'
 import { conf } from './appConfig'
 
 let aboutWindow: BrowserWindow
@@ -8,8 +8,9 @@ export const createAboutWindow = (parent: BrowserWindow): void => {
     modal: true,
     frame: false,
     webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false
+      nodeIntegration: false,
+      contextIsolation: true,
+      preload: path.join(__dirname, 'aboutPreload.js')
     }
   })
 
