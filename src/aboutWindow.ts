@@ -1,4 +1,6 @@
 import path from 'path'
+import { BrowserWindow, ipcMain, shell } from 'electron'
+import * as log from 'electron-log'
 import { conf } from './appConfig'
 
 let aboutWindow: BrowserWindow
@@ -19,6 +21,12 @@ export const createAboutWindow = (parent: BrowserWindow): void => {
 
   aboutWindow.on('closed', (): void => {
     aboutWindow.destroy()
+  })
+
+  aboutWindow.webContents.setWindowOpenHandler(({ url }) => {
+    log.info('Opening', url, 'in external browser')
+    void shell.openExternal(url)
+    return { action: 'deny' }
   })
 }
 
@@ -42,4 +50,8 @@ ipcMain.on('get-about-toggle-state', event => {
 // update about window toggle state from renderer
 ipcMain.on('change-about-window-state', (_event, value) => {
   conf.set('autoShowAboutWindow', value)
+})
+
+ipcMain.on('open-external', (_event, url) => {
+  void shell.openExternal(url)
 })
