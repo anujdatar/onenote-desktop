@@ -160,6 +160,7 @@ export const appMenuTemplate = (config: typeof conf): MenuItemConstructorOptions
         {
           label: 'About',
           id: 'about',
+          accelerator: 'F1',
           click () {
             const win = BrowserWindow.getFocusedWindow() as BrowserWindow
             createAboutWindow(win)
