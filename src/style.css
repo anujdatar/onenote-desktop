@@ -92,6 +92,8 @@ strong {
   background-color: var(--gh-inline);
   color: var(--gh-inline-text);
   padding: 2px 5px;
+  margin-top: 18px;
+  margin-left: -60px;
   border-radius: 5px;
 
   position: absolute;
