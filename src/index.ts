@@ -10,6 +10,10 @@ import { createAboutWindow } from './aboutWindow'
 import { createTrayItem } from './trayItem'
 // TODO: Implement tray item, tray context menu, open from tray, etc
 
+// log format setup
+log.transports.console.format = '[{y}-{m}-{d} {h}:{i}:{s}] [{level}] {text}'
+log.transports.file.format = '[{y}-{m}-{d} {h}:{i}:{s}] [{level}] {text}'
+
 let mainWindow: BrowserWindow
 
 const currentVersion = app.getVersion()
