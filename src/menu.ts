@@ -210,12 +210,12 @@ const toggleMenuVisibility = (config: typeof conf): void => {
   }
 }
 
-const showInfoMessageBox = (title: string): void => {
+const showInfoMessageBox = (title: string, message: string): void => {
   const win = BrowserWindow.getFocusedWindow() as BrowserWindow
   const options: MessageBoxOptions = {
     type: 'info',
     title,
-    message: 'Feature not implemented yet, due to Electron limitations',
+    message,
     buttons: ['OK'],
     defaultId: 0
   }
