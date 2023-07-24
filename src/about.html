@@ -58,6 +58,25 @@
   </h2>
   <ol>
     <li>
+      Updated app dependencies, general bug fixes and refactoring.
+    </li>
+    <li>
+      New <strong>tray item</strong> spawns with app.
+    </li>
+    <li>
+      <strong>Minimize to tray</strong> now works on Ubuntu 22.04 (Gnome).
+      Fedora 38 (Gnome) seems to have a weird bug where it calls window show
+      and minimize, so the app just goes back into minimized state. Looking for
+      a workaround. Also testing other Desktop Environments.
+    </li>
+    <li>
+      Fixed handling external links from the about page.
+    </li>
+  </ol>
+  Check GitHub commit logs for more details.
+  <h2>Other features from the previous updates</h2>
+  <ol>
+    <li>
       A new app <strong>MenuBar</strong> at the top. The menu is auto-hidable,
       press <mark>Alt</mark> to show/hide the menubar.
     </li>
@@ -162,6 +181,13 @@
   <h2>Known bugs</h2>
   <ul id="bugs">
     <li>
+      Minimize to tray not working properly in Fedora 38 (Gnome).
+    </li>
+    <li>
+      Close to tray functionality not working exactly as intended. Disabled for
+      now.
+    </li>
+    <li>
       Let me know.
       <a href="https://github.com/anujdatar/onenote-desktop/issues/new/choose"
         rel="noreferrer noopener" target="_blank">
@@ -177,14 +203,14 @@
   <h2>TO DO:</h2>
   <ol>
     <li>
-      Implement 'Minimize to Tray' and 'Close to Tray'. Only have
-      placeholders at the moment, they don't do anything. It's not an error.
+      Implement 'Close to Tray'. Only have
+      placeholders at the moment, doesn't do anything. It's not an error.
     </li>
     <li>
       Make about popup center itself inside the main window.
     </li>
     <li>
-      Dark Mode maybe?
+      Looking into Dark Mode.
     </li>
   </ol>
 
