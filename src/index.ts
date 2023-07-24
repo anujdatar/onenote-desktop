@@ -10,6 +10,8 @@ import { createAboutWindow } from './aboutWindow'
 import { createTrayItem } from './trayItem'
 // TODO: Implement tray item, tray context menu, open from tray, etc
 
+let mainWindow: BrowserWindow
+
 const currentVersion = app.getVersion()
 conf.set('currentVersion', currentVersion)
 
@@ -26,7 +28,7 @@ app.whenReady()
   .then(() => {
     log.info('app starting')
 
-    const mainWindow = createMainWindow()
+    mainWindow = createMainWindow()
     // create tray item
     createTrayItem(mainWindow)
 
@@ -35,7 +37,7 @@ app.whenReady()
     }
     app.on('activate', () => {
       if (BrowserWindow.getAllWindows().length === 0) {
-        createMainWindow()
+        mainWindow = createMainWindow()
       } else {
         mainWindow.show()
       }
