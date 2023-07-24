@@ -119,13 +119,9 @@ export const appMenuTemplate = (config: typeof conf): MenuItemConstructorOptions
           type: 'checkbox',
           id: 'minimizeToTray',
           click () {
-            // config.set('minimizeToTray', !config.get('minimizeToTray'))
-            // setMenuCheckbox(menu, 'minimizeToTray')
-            showInfoMessageBox('Minimize to tray')
-            const item = Menu.getApplicationMenu()?.getMenuItemById('minimizeToTray')
-            if (item != null) {
-              item.checked = false
-            }
+            showInfoMessageBox('Minimize to tray',
+              'Feature still experimental, works on Ubuntu 22.04 but not on Fedora 38. Please quit from tray and relaunch if open from tray does not work')
+            config.set('minimizeToTray', !config.get('minimizeToTray'))
           }
         },
         {

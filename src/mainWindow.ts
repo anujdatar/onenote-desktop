@@ -49,15 +49,12 @@ export const createMainWindow = (): BrowserWindow => {
   })
 
   // emitted when window is minimized
-  // mainWindow.on('minimize', (event: Event) => {
-  // if (conf.get('minimizeToTray')) {
-  // event.preventDefault()
-  // mainWindow.hide()
-  // }
-  // })
-  // mainWindow.on('restore', () => {
-  //   mainWindow.show()
-  // })
+  win.on('minimize', (event: Event) => {
+    if (conf.get('minimizeToTray')) {
+      event.preventDefault()
+      win.hide()
+    }
+  })
   // emitted when the window is about to be closed
   win.on('close', () => {
     conf.set('windowBounds', win.getBounds())
