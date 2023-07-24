@@ -9,34 +9,34 @@
   <link rel="stylesheet" href="style.css">
   <base href="./">
   <script>
-    const { ipcRenderer } = require("electron")
-    const appVersion = ipcRenderer.sendSync('get-app-version', 'getting-app-version')
-    function writeVer () {
-      document.write('v' + appVersion)
-    }
+    window.electron.setAboutWindowState()
   </script>
 </head>
 
 <body>
   <div class="header">
     <h1>OneNote-Desktop
-      <script>writeVer()</script>
+      <script>window.electron.writeVer()</script>
     </h1>
     <div>
-      <button class="close" id="xBtn" onclick="closeAbout()">&times;</button>
+      <button class="close" id="xBtn"
+        onclick="window.electron.closeAbout()">&times;</button>
     </div>
   </div>
 
-  <input type="checkbox" name="welcomeToggle" id="welcomeToggle"
-    onclick="welcomeMessageState()">
-  <label for="welcomeToggle" style="cursor:pointer;">Show message at
+  <input type="checkbox" name="aboutToggle" id="aboutToggle"
+    onclick="window.electron.toggleAboutWindowState()">
+  <label for="aboutToggle" style="cursor:pointer;">Show this message at
     startup</label>
 
   <p>OneNote desktop app for Linux.</p>
   <p>For source code and more information please visit the
-    <a href="https://github.com/anujdatar/onenote-desktop">
-      GitHub<span
-        class="tooltip">https://github.com/anujdatar/onenote-desktop</span>
+    <a href="https://github.com/anujdatar/onenote-desktop"
+      rel="noreferrer noopener" target="_blank">
+      GitHub
+      <span class="tooltip">
+        https://github.com/anujdatar/onenote-desktop
+      </span>
     </a> repo.
   </p>
   <p>This app does not modify or use any direct code from
@@ -54,8 +54,27 @@
   <hr>
 
   <h2>What's new in version
-    <script>writeVer()</script>?
+    <script>window.electron.writeVer()</script>?
   </h2>
+  <ol>
+    <li>
+      Updated app dependencies, general bug fixes and refactoring.
+    </li>
+    <li>
+      New <strong>tray item</strong> spawns with app.
+    </li>
+    <li>
+      <strong>Minimize to tray</strong> now works on Ubuntu 22.04 (Gnome).
+      Fedora 38 (Gnome) seems to have a weird bug where it calls window show
+      and minimize, so the app just goes back into minimized state. Looking for
+      a workaround. Also testing other Desktop Environments.
+    </li>
+    <li>
+      Fixed handling external links from the about page.
+    </li>
+  </ol>
+  Check GitHub commit logs for more details.
+  <h2>Other features from the previous updates</h2>
   <ol>
     <li>
       A new app <strong>MenuBar</strong> at the top. The menu is auto-hidable,
@@ -115,7 +134,8 @@
   <mark>Help</mark> menu. Should just help to reset any corrupted configs, or
   local cache. If this does not work, try to delete the config folders manually
   (steps given below). If this too does not help, please open a new issue on
-  <a href="https://github.com/anujdatar/onenote-desktop/issues/new/choose">
+  <a href="https://github.com/anujdatar/onenote-desktop/issues/new/choose"
+    rel="noreferrer noopener" target="_blank">
     GitHub
     <span class="tooltip">
       https://github.com/anujdatar/onenote-desktop/issues/new/choose
@@ -161,8 +181,16 @@
   <h2>Known bugs</h2>
   <ul id="bugs">
     <li>
+      Minimize to tray not working properly in Fedora 38 (Gnome).
+    </li>
+    <li>
+      Close to tray functionality not working exactly as intended. Disabled for
+      now.
+    </li>
+    <li>
       Let me know.
-      <a href="https://github.com/anujdatar/onenote-desktop/issues/new/choose">
+      <a href="https://github.com/anujdatar/onenote-desktop/issues/new/choose"
+        rel="noreferrer noopener" target="_blank">
         GitHub Issues
         <span class="tooltip">
           https://github.com/anujdatar/onenote-desktop/issues/new/choose
@@ -175,32 +203,16 @@
   <h2>TO DO:</h2>
   <ol>
     <li>
-      Implement 'Minimize to Tray' and 'Close to Tray'. Only have
-      placeholders at the moment, they don't do anything. It's not an error.
+      Implement 'Close to Tray'. Only have
+      placeholders at the moment, doesn't do anything. It's not an error.
     </li>
     <li>
       Make about popup center itself inside the main window.
     </li>
     <li>
-      Dark Mode maybe?
+      Looking into Dark Mode.
     </li>
   </ol>
-  <script>
-    // handle window close button
-    function closeAbout () {
-      ipcRenderer.send('close-about-page', 'closing-about-page')
-    }
-
-    // handle welcome message state checkbox on startup
-    ipcRenderer.send('welcome-toggle-state', 'getting-welcome-page-toggle-state')
-    ipcRenderer.on('welcome-toggle-state-reply', (event, value) => {
-      document.getElementById('welcomeToggle').checked = value
-    })
-    // toggle welcome message state checkbox
-    function welcomeMessageState () {
-      ipcRenderer.send('toggle-welcome-page-state', document.getElementById('welcomeToggle').checked)
-    }
-  </script>
 
 </body>
 
