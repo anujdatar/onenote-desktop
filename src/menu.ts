@@ -131,7 +131,7 @@ export const appMenuTemplate = (config: typeof conf): MenuItemConstructorOptions
           click () {
             // config.set('closeToTray', !config.get('closeToTray'))
             // setMenuCheckbox(menu, 'closeToTray')
-            showInfoMessageBox('Close to tray')
+            showInfoMessageBox('Close to tray', 'Feature not implemented yet')
             const item = Menu.getApplicationMenu()?.getMenuItemById('closeToTray')
             if (item != null) {
               item.checked = false
