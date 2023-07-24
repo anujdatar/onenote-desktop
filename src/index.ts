@@ -11,8 +11,8 @@ import { createTrayItem } from './trayItem'
 // TODO: Implement tray item, tray context menu, open from tray, etc
 
 // log format setup
-log.transports.console.format = '[{y}-{m}-{d} {h}:{i}:{s}] [{level}] {text}'
-log.transports.file.format = '[{y}-{m}-{d} {h}:{i}:{s}] [{level}] {text}'
+log.transports.console.format = '[{y}-{m}-{d} {h}:{i}:{s}.{ms}] [{level}] {text}'
+log.transports.file.format = '[{y}-{m}-{d} {h}:{i}:{s}.{ms}] [{level}] {text}'
 
 let mainWindow: BrowserWindow
 
