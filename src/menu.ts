@@ -264,7 +264,7 @@ const toggleGPUAcceleration = (config: typeof conf): void => {
     }
   })
 }
-const resetAppDefaults = (): MessageBoxOptions => {
+const appResetMessageBoxDefaultOptions = (): MessageBoxOptions => {
   const options: MessageBoxOptions = {
     type: 'warning',
     title: 'App reset confirmation',
@@ -280,7 +280,7 @@ const resetAppDefaults = (): MessageBoxOptions => {
 }
 
 const doSoftReset = (config: typeof conf): void => {
-  const options = resetAppDefaults()
+  const options = appResetMessageBoxDefaultOptions()
   options.detail = 'This will reset app settings to default values, but leave history/login data intact'
   showCustomMessageBox(options, (res: MessageBoxReturnValue) => {
     if (res.response === 1 && res.checkboxChecked) {
@@ -296,7 +296,7 @@ const doSoftReset = (config: typeof conf): void => {
 }
 
 const doHardReset = (config: typeof conf): void => {
-  const options = resetAppDefaults()
+  const options = appResetMessageBoxDefaultOptions()
   options.detail = 'This will reset all app settings, wipe history/login data and restart app'
   showCustomMessageBox(options, (res: MessageBoxReturnValue) => {
     if (res.response === 1 && res.checkboxChecked) {
