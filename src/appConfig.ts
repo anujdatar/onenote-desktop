@@ -1,8 +1,9 @@
 import ConfigStore from 'electron-store'
 
 // homepage: 'https://www.onenote.com/notebooks',
+// homepage: 'https://www.google.com',
 const appDefaults = {
-  homepage: 'https://www.google.com',
+  homepage: 'https://www.onenote.com/notebooks',
   autoHideMenuBar: false,
   minimizeToTray: false,
   closeToTray: false,
