@@ -12,10 +12,11 @@ Started because I prefer using separate app windows, and not opening everything 
 ___
 
 ## What's new?
-1. **App menu bar** - Auto-hidable menu bar. Use `Alt` to toggle hidden toolbar.
-2. **Forward/Back** - nav buttons in the app menubar.
-3. **Homepage** - Navigate to onenote homepage from menubar. if you're stuck on some other page.
-4. **App Reset** - New menu options under `Help` to reset app to defaults in case you run into errors, or bugs. These options do not make any changes to *Microsoft OneNote* settings or data. They only reset the local wrapper app's settings or history.
+1. **Tray item** and **Minimize to tray** functionality
+2. **App menu bar** - Auto-hidable menu bar. Use `Alt` to toggle hidden toolbar.
+3. **Forward/Back** - nav buttons in the app menubar.
+4. **Homepage** - Navigate to onenote homepage from menubar. if you're stuck on some other page.
+5. **App Reset** - New menu options under `Help` to reset app to defaults in case you run into errors, or bugs. These options do not make any changes to *Microsoft OneNote* settings or data. They only reset the local wrapper app's settings or history.
    - *Soft Reset* - i.e. reset to app defaults without deleting history/logins. (Reset app defaults)
    - *Hard Reset* - i.e. wipe everything and reset to defaults. you will need to login again. (Reset App - Everything)
 
