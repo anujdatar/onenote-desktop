@@ -1,9 +1,9 @@
 import path from 'path'
-import { app, BrowserWindow, globalShortcut, Menu, type MenuItem, shell } from 'electron'
+import { app, BrowserWindow, Menu, type MenuItem, shell } from 'electron'
 import * as log from 'electron-log'
 import { conf } from './appConfig'
 import { appMenuTemplate, setMenuBarVisibility } from './menu'
-import { createAboutWindow } from './aboutWindow'
+// import { createAboutWindow } from './aboutWindow'
 
 const currentVersion = app.getVersion()
 export const createMainWindow = (): BrowserWindow => {
@@ -95,9 +95,9 @@ export const createMainWindow = (): BrowserWindow => {
   // modify menu bar
   setMenuBarVisibility(win, !conf.get('autoHideMenuBar'))
   // register global shortcuts
-  globalShortcut.register('F1', () => {
-    createAboutWindow(win) // show about window on F1 keypress
-  })
+  // globalShortcut.register('F1', () => {
+  //   createAboutWindow(win) // show about window on F1 keypress
+  // })
   // set menu checkbox values
   setMenuCheckbox(menu, 'autoHideMenuBar')
   setMenuCheckbox(menu, 'minimizeToTray')
